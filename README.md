@@ -9,7 +9,9 @@ Warm up project for CS 205 Spring 2019 at the University of Vermont. Creating a 
 2. Create the program to interact with the data
 	* Build grammar for user to create "sentences" which translate into queries.
 	* Allow user to type commands to query values from at least 3 columns of each table.
-	* At least one query that involves a join between the two tables
+	* At least one query that involves a join between the two tables.
 	* A command to let user view the schema.
+## Data Set
+TBD
 ## Team Members
 Christian DeLuca, Megan Doyle, Jiangyong Yu, and Dale Larie.
