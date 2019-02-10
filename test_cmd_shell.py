@@ -25,6 +25,9 @@ def create_connection(db_file):
 
 
 def show_tables():
+    """ queries database for all tables and
+        displays the table names in a column
+    """
     print("In database named %s, you have the following tables:" % database_name.rstrip('.db'))
     cur = conn.cursor()
     cur.execute("SELECT name FROM sqlite_master WHERE type='table';")
@@ -34,6 +37,9 @@ def show_tables():
 
 
 def show_schema():
+    """ queries database for the full schema and
+        displays the column information per table
+    """
     print("Displaying database schema:\n")
     cur = conn.cursor()
     cur.execute("SELECT name FROM sqlite_master WHERE type='table';")
@@ -46,6 +52,10 @@ def show_schema():
 
 
 def show_table_layout(inp):
+    """ queries database for a matching table to inp
+        then displays the table headers and content
+    :param inp: user inputted argument
+    """
     table_list = []
     cur = conn.cursor()
     # should try surrounding this in a try block and doing %s with the table name and just boot out on exception
@@ -57,19 +67,20 @@ def show_table_layout(inp):
         cur.execute("PRAGMA table_info(%s)" % inp)
         for i in cur.fetchall():
             headers.append(i[1])
-      ##
-      ## TODO: formatting output
-      ##
+
+        # TODO: format output
+
         print(headers)
         cur.execute("SELECT * FROM %s" % inp)
         for j in cur.fetchall():
             print(j)
 
     else:
-        print("lol no")
+        print("No matching table '%s'" % inp)
+
     conn.commit()
 
-
+# DO NOT DELETE.
 # def multi_param(inp):
 #     if inp == 'first option':
 #
@@ -81,15 +92,21 @@ def show_table_layout(inp):
 
 
 def simple_column_select(query_list):
+    """ queries database for a matching table and column
+        then displays the requested column from the table
+    :param query_list list containing column and table
+    """
     table = query_list[0]
     column = query_list[1]
     cur = conn.cursor()
-    cur.execute('SELECT %s FROM %s' % (column, table))
-    result = cur.fetchall()
-    for results in result:
-        print(results[0])
+    try:
+        cur.execute('SELECT %s FROM %s' % (column, table))
+        result = cur.fetchall()
+        for results in result:
+            print(results[0])
+    except sqlite3.OperationalError as err:
+        print(err)
 
-    # save (commit) the changes
     conn.commit()
 
 
@@ -130,7 +147,7 @@ class MainPrompt(Cmd):
     def do_get_column(self, inp):
         params = inp.split()
         if len(params) != 2:
-            print("*** invalid number of arguments")
+            print("Invalid number of arguments.\nUsage:\n\tget_column 'table' 'column'")
             return
         else:
             simple_column_select(params)
@@ -155,7 +172,7 @@ class MainPrompt(Cmd):
 
 
 if __name__ == '__main__':
-    # replace this with our database once we have it
+    # TODO: replace this with our database once we have it
     database_name = "sample.db"
     # create a database connection
     conn = create_connection('db/' + database_name)
