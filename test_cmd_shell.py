@@ -2,7 +2,6 @@ import linecache
 import sqlite3
 from cmd import Cmd
 from sqlite3 import Error
-from click._compat import raw_input
 import cli_animations
 
 # Debug variable
@@ -95,21 +94,6 @@ def simple_column_select(query_list):
     conn.commit()
 
 
-def intro():
-    cli_animations.logo_animation("""  
-            \\  /
-         ____\\/_________     88888888888 888     888     88888888888 888     888 888b    888 8888888888 8888888b.  
-        |,----------.  |\\        888     888     888         888     888     888 8888b   888 888        888   Y88b 
-        ||           |=| |       888     888     888         888     888     888 88888b  888 888        888    888 
-        ||          || | |       888     Y88b   d88P         888     888     888 888Y88b 888 8888888    888   d88P 
-        ||       . _o| | | __    888      Y88b d88P          888     888     888 888 Y88b888 888        8888888P"  
-        |`-----------' |/ /~/    888       Y88o88P  888888   888     888     888 888  Y88888 888        888 T88b   
-         ~~~~~~~~~~~~~~~ / /     888        Y888P            888     Y88b. .d88P 888   Y8888 888        888  T88b  
-                         ~~      888         Y8P             888      "Y88888P"  888    Y888 8888888888 888   T88b 
-         """, 0.03, 0)
-    cli_animations.typewrite('Welcome! Type "?" or "help" to list commands.\n', 0.03, 0)
-
-
 class MainPrompt(Cmd):
     prompt = '<tvTuner>'
 
@@ -141,7 +125,7 @@ class MainPrompt(Cmd):
 
     def do_hello(self, s):
         if s == '':
-            s = raw_input('Your name please: ')
+            s = input('Your name please: ')
         print('Hello', s)
 
     def do_get_column(self, inp):
@@ -180,4 +164,4 @@ if __name__ == '__main__':
     with conn:
         if debug:
             print("connected!")
-        MainPrompt().cmdloop(intro())
+        MainPrompt().cmdloop(cli_animations.intro())
