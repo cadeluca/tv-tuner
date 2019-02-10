@@ -1,4 +1,3 @@
-import linecache
 import sqlite3
 from cmd import Cmd
 from sqlite3 import Error
@@ -156,11 +155,10 @@ class MainPrompt(Cmd):
 
 
 if __name__ == '__main__':
-    path = linecache.getline('db_path.config', 2).rstrip("\n")
-    print(path)
+    # replace this with our database once we have it
     database_name = "sample.db"
     # create a database connection
-    conn = create_connection(path + database_name)
+    conn = create_connection('db/' + database_name)
     with conn:
         if debug:
             print("connected!")
