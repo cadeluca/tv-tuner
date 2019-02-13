@@ -61,7 +61,7 @@ def test_driver():
 
 if __name__ == '__main__':
     # TODO: replace this with our database once we have it
-    database_name = "sample.db"
+    database_name = "tv_tuner.db"
     # create a database connection
     conn = test_cmd_shell.create_connection('db/' + database_name)
     with conn:
