@@ -59,6 +59,7 @@ if __name__ == '__main__':
             else:
                 passed = False
 
-            print passed
+            if passed:
+                print "all tests passed"
 
         test_driver()
