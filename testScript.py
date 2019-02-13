@@ -3,13 +3,25 @@ import test_cmd_shell
 import unittest
 import cli_animations
 import io
+# try:
+#     import StringIO
+# except ImportError:
+#     from io import StringIO
 
 # Debug variable
 debug = True
 
+        # def test_foo(inp):
+        #
+        #     capturedOutput = StringIO.StringIO()  # Create StringIO object
+        #     sys.stdout = capturedOutput  # and redirect stdout.
+        #     test_cmd_shell.MainPrompt().onecmd(inp) # Call unchanged function.
+        #     sys.stdout = sys.__stdout__  # Reset redirect.
+        #     # print 'Captured', capturedOutput.getvalue()  # Now works as before.
 
+            # return capturedOutput.getvalue()
 def test_foo(inp):
-    captured_output = io.StringIO.StringIO()  # Create StringIO object
+    captured_output = io.BytesIO()  # Create StringIO object
     sys.stdout = captured_output  # and redirect stdout.
     test_cmd_shell.MainPrompt().onecmd(inp)  # Call unchanged function.
     sys.stdout = sys.__stdout__  # Reset redirect.
