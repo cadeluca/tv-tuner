@@ -1,10 +1,13 @@
-import StringIO
+
 import sys
 import test_cmd_shell
 import unittest
 import cli_animations
 
-
+try:
+    import StringIO
+except ImportError:
+    from io import StringIO
 # Debug variable
 debug = True
 
