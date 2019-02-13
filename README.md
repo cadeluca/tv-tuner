@@ -12,6 +12,7 @@ Warm up project for CS 205 Spring 2019 at the University of Vermont. Creating a 
 	* At least one query that involves a join between the two tables.
 	* A command to let user view the schema.
 ## Data Set
-TBD
+Our data set contains the information about various TV shows and their networks, 
+on/off air status, number of seasons, runtime, and genre.
 ## Team Members
 Christian DeLuca, Megan Doyle, Jiangyong Yu, and Dale Larie.
