@@ -2,6 +2,7 @@ import sqlite3
 from cmd import Cmd
 from sqlite3 import Error
 import cli_animations
+from sqlite3_query_writer import query_writer
 
 # Debug variable
 debug = True
@@ -155,6 +156,24 @@ def detail_viewer(detail_type, show_list):
                 # select <runtime> from <table that has runtime> where <name id> = <name>
                 result = cur.execute("SELECT %s FROM %s WHERE nameidtobechanged = '%s'" % (detail, table, show)).fetchone()
 
+# this uses that big function.
+def print_length(input_string):
+    query = query_writer(input_string)
+
+    connection = create_connection("db\sample.db")
+
+    cursor = connection.cursor()
+
+    cursor.execute(query)
+
+    results = cursor.fetchall()
+
+    if (len(results) == 1):
+        print(results[0][6])
+    else:
+        for result in results:
+            print(str(result[1]) + ": " + str(result[6]) + "\n")
+
 #
 # End Simple grammar functions
 #
@@ -193,6 +212,9 @@ class MainPrompt(Cmd):
 
     def do_list(self, inp):
         list_table_content(inp)
+
+    def do_length(self, inp):
+        print_length(inp)
 
     def do_runtime(self, inp):
         # do regex search for shows, return a list
