@@ -19,16 +19,27 @@ def create_connection(db_file):
     try:
         connection = sqlite3.connect(db_file)
         return connection
-    except Error as e:
-        print(e)
+    except Error as err:
+        print(err)
     return None
 
 
 def find_matching_show(searched_string):
-    results = []
-    # SELECT FROM TABLE WITH SHOW NAMES WHERE NAME IS LIKE THE SEARCHED STRING
-    # PRIORITIZE EXACT MATCH THEN RIGHT THEN CONTAINS THEN LEFT
-    return results
+    """ query the database for the all types of matches
+        on the searched string and return a list of results
+    :param searched_string: string to use in LIKE query
+    :return: list of matches
+    """
+    cur = conn.cursor()
+    # TODO: replace title and employees with the corresponding values from new db
+    results = cur.execute("SELECT title FROM employees WHERE title LIKE '%"+searched_string+"%';").fetchall()
+    results_list = []
+    for result in results:
+        if debug:
+            print(result[0])
+        results_list.append(result[0])
+    conn.commit()
+    return results_list
 
 
 #
@@ -77,17 +88,13 @@ def list_table_content(inp):
         cur.execute("PRAGMA table_info(%s)" % inp)
         for i in cur.fetchall():
             headers.append(i[1])
-
         # TODO: format output
-
         print(headers)
         cur.execute("SELECT * FROM %s" % inp)
         for j in cur.fetchall():
             print(j)
-
     else:
         print("No matching table '%s'" % inp)
-
     conn.commit()
 
 
@@ -101,8 +108,10 @@ def list_columns(desired_table_name):
     print(desired_table)
     if len(desired_table) != 0:
         print("The table '%s' has the following columns:" % desired_table_name)
+        print("\tName\t\tType\n"
+              "\t------\t\t------")
         for column in desired_table:
-            print("\t" + column[1])
+            print("\t" + column[1] + "\t\t" + str(column[2]).lower())
     else:
         print("The table '%s' is not in the database." % desired_table_name)
 
@@ -202,7 +211,10 @@ class MainPrompt(Cmd):
 
     # TODO: REQUIRES FORMATTING
     def do_list(self, inp):
-        list_table_content(inp)
+        if len(inp) != 0:
+            list_table_content(inp)
+        else:
+            print('Invalid number of arguments. \nUsage:\n\tlist \'table_name\'')
 
     def help_list(self):
         print('Lists the content of a table. \nUsage:\n\tlist \'table_name\'')
@@ -244,9 +256,12 @@ class MainPrompt(Cmd):
         print('Returns the full details of a show and/or best matching shows, including: network, season count,'
               'runtime, genre, and on/off air status. \nUsage:\n\truntime \'show_name\'')
 
+    def do_test_match(self, inp):
+        find_matching_show(inp)
+
     # TODO: see if we actually need to follow the pycharm suggestion to make it static
     @staticmethod
-    def do_get_column(inp):
+    def do_columns(inp):
         params = inp.split()
         if len(params) == 2:
             full_column_return(params)
@@ -254,14 +269,14 @@ class MainPrompt(Cmd):
             list_columns(params[0])
         else:
             print("Invalid number of arguments.\nUsage:"
-                  "\n\tget_column 'table' - returns a list of columns in that table."
-                  "\n\tget_column 'table' 'column' - returns the contents of that column from that table.")
+                  "\n\tcolumns 'table' - returns a list of columns in that table."
+                  "\n\tcolumns 'table' 'column' - returns the contents of that column from that table.")
             return
 
-    def help_get_column(self):
+    def help_columns(self):
         print("Returns either a list of the columns in a table or the contents.\nUsage:"
-              "\n\tget_column 'table' - returns a list of columns in that table."
-              "\n\tget_column 'table' 'column' - returns the contents of that column from that table.")
+              "\n\tcolumns 'table' - returns a list of columns in that table."
+              "\n\tcolumns 'table' 'column' - returns the contents of that column from that table.")
 
     def default(self, inp):
         if inp == 'x' or inp == 'q':
