@@ -40,7 +40,7 @@ def list_tables():
     """
     print("In database named %s, you have the following tables:" % database_name.rstrip('.db'))
     cur = conn.cursor()
-    cur.execute("SELECT name FROM sqlite_master WHERE type='table';")
+    cur.execute("SELECT name FROM sqlite_sequence ORDER BY name;")
     for table in cur.fetchall():
         print("\t" + table[0])
     conn.commit()
