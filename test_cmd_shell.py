@@ -146,7 +146,7 @@ def full_column_return(query_list):
 #
 
 # the following functions will be given a list of possible matching shows from prompt
-
+# TODO: finish this when given actual database schema
 def detail_viewer(detail_type, input):
     show_list = find_matching_show(input)
     cur = conn.cursor()
@@ -176,10 +176,7 @@ def detail_viewer(detail_type, input):
 # Complex grammar functions
 #
 
-# TODO @cadeluca: complete this @ other todo
-def show_finder(search_request_list):
-    print(search_request_list)
-    # request_list reads like:   look for a show
+# TODO: Place the search function here
 
 #
 # End Complex grammar functions
@@ -190,6 +187,7 @@ class MainPrompt(Cmd):
     prompt = '<tvTuner> '
 
     def do_exit(self, inp):
+        print("\n\t")
         cli_animations.typewrite("Tune in next time!", 0.04, 0.04)
         return True
 
@@ -255,9 +253,6 @@ class MainPrompt(Cmd):
     def help_details(self):
         print('Returns the full details of a show and/or best matching shows, including: network, season count,'
               'runtime, genre, and on/off air status. \nUsage:\n\truntime \'show_name\'')
-
-    def do_test_match(self, inp):
-        find_matching_show(inp)
 
     # TODO: see if we actually need to follow the pycharm suggestion to make it static
     @staticmethod
