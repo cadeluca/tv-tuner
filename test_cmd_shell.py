@@ -7,8 +7,6 @@ import cli_animations
 debug = True
 
 
-# TODO: ask Hibbeler if citations are necessary from SQLite official tutorial
-
 #
 # Helper functions
 #
@@ -25,10 +23,13 @@ def create_connection(db_file):
         print(e)
     return None
 
+
 def find_matching_show(searched_string):
     # do some regex here
     results = []
     return results
+
+
 #
 # SQL style functions
 #
@@ -249,35 +250,3 @@ if __name__ == '__main__':
             print("connected!")
         MainPrompt().cmdloop(cli_animations.intro())
 
-
-# extras lol
-
-# DO NOT DELETE.
-# def multi_param(inp):
-#     if inp == 'first option':
-#
-#     elif inp == 'second option':
-#         #
-#     else:
-#         print("Unrecognized or missing parameters. Usage:"
-#               "\n\t- show \"table_name\" to display that table.")
-
-
- # # example of multi params in just the command
-    # def do_add(self, s):
-    #     l = s.split()
-    #     if len(l) != 2:
-    #         print("*** invalid number of arguments")
-    #         return
-    #     try:
-    #         l = [int(i) for i in l]
-    #     except ValueError:
-    #         print("*** arguments should be numbers")
-    #         return
-    #     print(l[0] + l[1])
-
-    # example of interacting with the shell, we could use this style to
-    # def do_hello(self, s):
-    #     if s == '':
-    #         s = input('Your name please: ')
-    #     print('Hello', s)
