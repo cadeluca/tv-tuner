@@ -19,15 +19,27 @@ def create_connection(db_file):
     try:
         connection = sqlite3.connect(db_file)
         return connection
-    except Error as e:
-        print(e)
+    except Error as err:
+        print(err)
     return None
 
 
 def find_matching_show(searched_string):
-    # do some regex here
-    results = []
-    return results
+    """ query the database for the all types of matches
+        on the searched string and return a list of results
+    :param searched_string: string to use in LIKE query
+    :return: list of matches
+    """
+    cur = conn.cursor()
+    # TODO: replace title and employees with the corresponding values from new db
+    results = cur.execute("SELECT title FROM employees WHERE title LIKE '%"+searched_string+"%';").fetchall()
+    results_list = []
+    for result in results:
+        if debug:
+            print(result[0])
+        results_list.append(result[0])
+    conn.commit()
+    return results_list
 
 
 #
@@ -39,7 +51,7 @@ def list_tables():
     """
     print("In database named %s, you have the following tables:" % database_name.rstrip('.db'))
     cur = conn.cursor()
-    cur.execute("SELECT name FROM sqlite_master WHERE type='table';")
+    cur.execute("SELECT name FROM sqlite_sequence ORDER BY name;")
     for table in cur.fetchall():
         print("\t" + table[0])
     conn.commit()
@@ -76,17 +88,13 @@ def list_table_content(inp):
         cur.execute("PRAGMA table_info(%s)" % inp)
         for i in cur.fetchall():
             headers.append(i[1])
-
         # TODO: format output
-
         print(headers)
         cur.execute("SELECT * FROM %s" % inp)
         for j in cur.fetchall():
             print(j)
-
     else:
         print("No matching table '%s'" % inp)
-
     conn.commit()
 
 
@@ -100,8 +108,10 @@ def list_columns(desired_table_name):
     print(desired_table)
     if len(desired_table) != 0:
         print("The table '%s' has the following columns:" % desired_table_name)
+        print("\tName\t\tType\n"
+              "\t------\t\t------")
         for column in desired_table:
-            print("\t" + column[1])
+            print("\t" + column[1] + "\t\t" + str(column[2]).lower())
     else:
         print("The table '%s' is not in the database." % desired_table_name)
 
@@ -136,8 +146,9 @@ def full_column_return(query_list):
 #
 
 # the following functions will be given a list of possible matching shows from prompt
-
-def detail_viewer(detail_type, show_list):
+# TODO: finish this when given actual database schema
+def detail_viewer(detail_type, input):
+    show_list = find_matching_show(input)
     cur = conn.cursor()
     if detail_type == 'details':
         # give all information on that show
@@ -165,21 +176,18 @@ def detail_viewer(detail_type, show_list):
 # Complex grammar functions
 #
 
-# TODO @cadeluca: complete this @ other todo
-def show_finder(search_request_list):
-    print(search_request_list)
-    # request_list reads like:   look for a show
+# TODO: Place the search function here
 
 #
 # End Complex grammar functions
 #
 
 
-
 class MainPrompt(Cmd):
     prompt = '<tvTuner> '
 
     def do_exit(self, inp):
+        print("\n\t")
         cli_animations.typewrite("Tune in next time!", 0.04, 0.04)
         return True
 
@@ -189,18 +197,66 @@ class MainPrompt(Cmd):
     def do_tables(self, inp):
         list_tables()
 
+    def help_tables(self):
+        print('Lists the tables in the database.')
+
     def do_schema(self, inp):
         show_schema()
 
+    def help_schema(self):
+        print('Displays the schema for the database. Note: this is not the same as the SQL '
+              'schema command that provides an exportable file to be used to recreate the database.')
+
+    # TODO: REQUIRES FORMATTING
     def do_list(self, inp):
-        list_table_content(inp)
+        if len(inp) != 0:
+            list_table_content(inp)
+        else:
+            print('Invalid number of arguments. \nUsage:\n\tlist \'table_name\'')
+
+    def help_list(self):
+        print('Lists the content of a table. \nUsage:\n\tlist \'table_name\'')
 
     def do_runtime(self, inp):
-        # do regex search for shows, return a list
-        show_list = find_matching_show(inp)
-        detail_viewer('runtime', show_list)
+        detail_viewer('runtime', inp)
 
-    def do_get_column(self, inp):
+    def help_runtime(self):
+        print('Returns the runtime of a show and/or best matching shows. \nUsage:\n\truntime \'show_name\'')
+
+    def do_status(self, inp):
+        detail_viewer('status', inp)
+
+    def help_status(self):
+        print('Returns the on/off air status of a show and/or best matching shows. \nUsage:\n\tstatus \'show_name\'')
+
+    def do_seasons(self, inp):
+        detail_viewer('seasons', inp)
+
+    def help_seasons(self):
+        print('Returns the season count of a show and/or best matching shows. \nUsage:\n\tseasons \'show_name\'')
+
+    def do_network(self, inp):
+        detail_viewer('network', inp)
+
+    def help_network(self):
+        print('Returns the network a show and/or best matching shows is/are on. \nUsage:\n\tnetwork \'show_name\'')
+
+    def do_genre(self, inp):
+        detail_viewer('genre', inp)
+
+    def help_genre(self):
+        print('Returns the genre of a show and/or best matching shows. \nUsage:\n\tgenre \'show_name\'')
+
+    def do_details(self, inp):
+        detail_viewer('details', inp)
+
+    def help_details(self):
+        print('Returns the full details of a show and/or best matching shows, including: network, season count,'
+              'runtime, genre, and on/off air status. \nUsage:\n\truntime \'show_name\'')
+
+    # TODO: see if we actually need to follow the pycharm suggestion to make it static
+    @staticmethod
+    def do_columns(inp):
         params = inp.split()
         if len(params) == 2:
             full_column_return(params)
@@ -208,31 +264,14 @@ class MainPrompt(Cmd):
             list_columns(params[0])
         else:
             print("Invalid number of arguments.\nUsage:"
-                  "\n\tget_column 'table' - returns a list of columns in that table."
-                  "\n\tget_column 'table' 'column' - returns the contents of that column from that table.")
+                  "\n\tcolumns 'table' - returns a list of columns in that table."
+                  "\n\tcolumns 'table' 'column' - returns the contents of that column from that table.")
             return
 
-    # TODO: ASK HIBBELER IF THIS COUNTS AS USING THE GRAMMAR
-    # TODO @cadeluca: continue to work on this
-    def do_find(self, inp):
-        if inp == '':
-            print("What do you want to find? Enter the first character or the word to search:")
-            print("\t[1] tracks\t[2] albums\n\t[3] artists\t[4] genres\n\t[5] cancel")
-            valid_search = False
-            search_request = []
-            valid_options = ['1', '2', '3', '4', '5', 'tracks', 'albums', 'artists', 'genres', 'cancel']
-            while not valid_search:
-                try:
-                    search_type = input('- find: ')
-                except ValueError:
-                    print("that is not one of the options")
-                    continue
-                if search_type not in valid_options:
-                    print("that is not one of the options")
-                    continue
-                else:
-                    valid_search = True
-            print("woo! here we would link to the valid search for each type, by calling the appropriate function")
+    def help_columns(self):
+        print("Returns either a list of the columns in a table or the contents.\nUsage:"
+              "\n\tcolumns 'table' - returns a list of columns in that table."
+              "\n\tcolumns 'table' 'column' - returns the contents of that column from that table.")
 
     def default(self, inp):
         if inp == 'x' or inp == 'q':
@@ -249,4 +288,3 @@ if __name__ == '__main__':
         if debug:
             print("connected!")
         MainPrompt().cmdloop(cli_animations.intro())
-
