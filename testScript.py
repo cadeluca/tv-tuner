@@ -11,15 +11,7 @@ import io
 # Debug variable
 debug = True
 
-        # def test_foo(inp):
-        #
-        #     capturedOutput = StringIO.StringIO()  # Create StringIO object
-        #     sys.stdout = capturedOutput  # and redirect stdout.
-        #     test_cmd_shell.MainPrompt().onecmd(inp) # Call unchanged function.
-        #     sys.stdout = sys.__stdout__  # Reset redirect.
-        #     # print 'Captured', capturedOutput.getvalue()  # Now works as before.
 
-            # return capturedOutput.getvalue()
 def test_foo(inp):
     captured_output = io.BytesIO()  # Create StringIO object
     sys.stdout = captured_output  # and redirect stdout.
@@ -36,22 +28,51 @@ def test_exit():
         print("Failed exit 1")
         passed = False
 
-    if test_foo('q') != 'Bye\n':
+    if test_foo('x') != 'Bye\n':
         print("Failed exit 2")
         passed = False
 
     if test_foo("exit") != 'Bye\n':
         print("Failed exit 3")
-
         passed = False
+
+    if test_foo('Q') != 'Bye\n':
+        print("Failed exit 4")
+        passed = False
+
+    if test_foo('X') != 'Bye\n':
+        print("Failed exit 5")
+        passed = False
+
+    if test_foo('eXiT') != 'Bye\n':
+        print("Failed exit 6")
+        passed = False
+
 
     return passed
 
+def test_greet():
+    passed = True
+    if test_foo('greet') != 'Hi!\n':
+        print("Failed greet 1")
+        passed = False
+
+    if test_foo('Greet') != 'Hi!\n':
+        print("Failed greet 2")
+        passed = False
+
+    if test_foo('gReEt') != 'Hi!\n':
+        print("Failed greet 3")
+        passed = False
+
+    return passed
 
 def test_driver():
     passed = True
     if test_exit():
         print("Passed Exit")
+    elif test_greet():
+        print("Passed Greet")
     else:
         passed = False
 
