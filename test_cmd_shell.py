@@ -32,7 +32,7 @@ def find_matching_show(searched_string):
     """
     cur = conn.cursor()
     # TODO: replace title and employees with the corresponding values from new db
-    results = cur.execute("SELECT title FROM employees WHERE title LIKE '%"+searched_string+"%';").fetchall()
+    results = cur.execute("SELECT shows FROM shows WHERE shows LIKE '%"+searched_string+"%';").fetchall()
     results_list = []
     for result in results:
         if debug:
@@ -187,7 +187,6 @@ class MainPrompt(Cmd):
     prompt = '<tvTuner> '
 
     def do_exit(self, inp):
-        print("\n\t")
         cli_animations.typewrite("Tune in next time!", 0.04, 0.04)
         return True
 
