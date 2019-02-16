@@ -1,3 +1,18 @@
+#!/usr/bin/env python
+
+"""
+CS 205: Warm-up Project
+UVM Spring Semester 2019
+
+Team members:
+Christian DeLuca
+Jiangyong Yu
+Megan Doyle
+Dale Larie
+
+CLI for data on television shows
+"""
+
 import sqlite3
 from cmd import Cmd
 from sqlite3 import Error
