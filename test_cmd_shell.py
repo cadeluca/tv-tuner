@@ -273,37 +273,62 @@ class MainPrompt(Cmd):
         print('Lists the content of a table. \nUsage:\n\tlist \'table_name\'')
 
     def do_runtime(self, inp):
-        detail_viewer('runtime', inp)
+        if len(inp) > 0:
+            detail_viewer('runtime', inp)
+        else:
+            print("Invalid number of arguments.\nUsage:"
+                  "\n\truntime 'show' - returns the runtime of any matching shows from your inputted string.")
 
     def help_runtime(self):
         print('Returns the runtime of a show and/or best matching shows. \nUsage:\n\truntime \'show_name\'')
 
     def do_status(self, inp):
-        detail_viewer('status', inp)
+        if len(inp) > 0:
+            detail_viewer('status', inp)
+        else:
+            print("Invalid number of arguments.\nUsage:"
+                  "\n\tstatus 'show' - returns the air status of any matching shows from your inputted string.")
 
     def help_status(self):
         print('Returns the on/off air status of a show and/or best matching shows. \nUsage:\n\tstatus \'show_name\'')
 
     def do_seasons(self, inp):
-        detail_viewer('seasons', inp)
+        if len(inp) > 0:
+            detail_viewer('seasons', inp)
+        else:
+            print("Invalid number of arguments.\nUsage:"
+                  "\n\tseasons 'show' - returns the number of seasons of any matching shows from your inputted string.")
 
     def help_seasons(self):
         print('Returns the season count of a show and/or best matching shows. \nUsage:\n\tseasons \'show_name\'')
 
     def do_network(self, inp):
-        detail_viewer('network', inp)
+        if len(inp) > 0:
+            detail_viewer('network', inp)
+        else:
+            print("Invalid number of arguments.\nUsage:"
+                  "\n\tnetwork 'show' - returns the network of any matching shows from your inputted string.")
 
     def help_network(self):
         print('Returns the network a show and/or best matching shows is/are on. \nUsage:\n\tnetwork \'show_name\'')
 
     def do_genre(self, inp):
-        detail_viewer('genre', inp)
+        if len(inp) > 0:
+            detail_viewer('genre', inp)
+        else:
+            print("Invalid number of arguments.\nUsage:"
+                  "\n\tgenre 'show' - returns the genre of any matching shows from your inputted string.")
 
     def help_genre(self):
         print('Returns the genre of a show and/or best matching shows. \nUsage:\n\tgenre \'show_name\'')
 
     def do_details(self, inp):
-        detail_viewer('details', inp)
+        if len(inp) > 0:
+            detail_viewer('details', inp)
+        else:
+            print("Invalid number of arguments.\nUsage:"
+                  "\n\tdetails 'show' - returns the details of any matching shows, including: network, season count,"
+                  " runtime, genre, and on/off air status from your inputted string.")
 
     def help_details(self):
         print('Returns the full details of a show and/or best matching shows, including: network, season count,'
@@ -321,7 +346,6 @@ class MainPrompt(Cmd):
             print("Invalid number of arguments.\nUsage:"
                   "\n\tcolumns 'table' - returns a list of columns in that table."
                   "\n\tcolumns 'table' 'column' - returns the contents of that column from that table.")
-            return
 
     def help_columns(self):
         print("Returns either a list of the columns in a table or the contents.\nUsage:"
