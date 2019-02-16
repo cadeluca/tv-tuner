@@ -125,9 +125,9 @@ def list_columns(desired_table_name):
     if len(desired_table) != 0:
         print("The table '%s' has the following columns:" % desired_table_name)
         print("\tName\t\tType\n"
-              "\t------\t\t------")
+              "\t------\t\t\t------")
         for column in desired_table:
-            print("\t" + column[1] + "\t\t" + str(column[2]).lower())
+            print("\t" + column[1] + "\t\t\t" + str(column[2]).lower())
     else:
         print("The table '%s' is not in the database." % desired_table_name)
 
@@ -362,7 +362,7 @@ if __name__ == '__main__':
     # TODO: replace this with our database once we have it
     database_name = "tv_tuner.db"
     # create a database connection
-    conn = create_connection('db/' + database_name)
+    conn = create_connection(database_name)
     with conn:
         if debug:
             print("connected!")
