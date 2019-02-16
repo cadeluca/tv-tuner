@@ -17,6 +17,7 @@ import sqlite3
 from cmd import Cmd
 from sqlite3 import Error
 import cli_animations
+from sqlite3_query_writer import query_writer
 
 # Debug variable
 debug = True
@@ -106,10 +107,12 @@ def list_table_content(inp):
         for i in cur.fetchall():
             headers.append(i[1])
         # TODO: format output
+
         print(headers)
         cur.execute("SELECT * FROM %s" % inp)
         for j in cur.fetchall():
             print(j)
+
     else:
         print("No matching table '%s'" % inp)
     conn.commit()
@@ -223,6 +226,58 @@ def detail_viewer(detail_type, inp):
                                          "WHERE name = '%s'" % (detail_type, show)).fetchone()
                     print(("\t- %s is on " + result[0]) % show)
         conn.commit()
+
+
+# this uses that big function.
+def search(input_string):
+    """
+    Search function, takes some paramters and returns a formatted table that shows those columns
+    :param input_string:
+    :return:
+    """
+
+    cursor = conn.cursor()
+
+    # getting the query and columns
+    query, queried_columns = query_writer(input_string)
+
+    # formatting for the print table
+    column_names = ["Name", "Runtime", "Seasons", "Status", "Genre", "NID", "NID", "Network", "Ranking"]
+    # spacing for the columns
+    column_widths = ["30", "9", "9", "8", "8", "8", "8", "10", "8"]
+
+    try:
+        # querying the database
+        cursor.execute(query)
+        results = cursor.fetchall()
+
+        # keeps track of which indices are queired, for the table printing
+        queried_indices = [0]
+
+        # fills the queried indices
+        for i in range(len(column_names)):
+            if column_names[i].lower() in queried_columns:
+                queried_indices.append(i)
+
+        # prints the column names
+        for i in range(len(column_names)):
+            if i in queried_indices:
+                print(format(column_names[i], column_widths[i] + "s"), end="")
+
+        print("\n")
+
+        # prints the rows
+        for i in range(len(results)):
+            for j in range(len(results[0])):
+                if j in queried_indices:
+                    print(format(str(results[i][j]), column_widths[j] + "s"), end="")
+            print("\n")
+
+    # if the query failed
+    except:
+        print("No results, check your query string")
+
+
 #
 # End Simple grammar functions
 #
@@ -271,6 +326,9 @@ class MainPrompt(Cmd):
 
     def help_list(self):
         print('Lists the content of a table. \nUsage:\n\tlist \'table_name\'')
+
+    def do_search(self, inp):
+        search(inp)
 
     def do_runtime(self, inp):
         if len(inp) > 0:
