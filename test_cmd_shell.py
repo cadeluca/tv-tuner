@@ -47,13 +47,15 @@ def find_matching_show(searched_string):
     """
     cur = conn.cursor()
     # TODO: replace title and employees with the corresponding values from new db
-    results = cur.execute("SELECT shows FROM shows WHERE shows LIKE '%"+searched_string+"%';").fetchall()
+    results = cur.execute("SELECT name FROM shows WHERE name LIKE '%"+searched_string+"%';").fetchall()
     results_list = []
     for result in results:
         if debug:
             print(result[0])
         results_list.append(result[0])
     conn.commit()
+    # if debug:
+    #     print(results_list)
     return results_list
 
 
@@ -66,7 +68,7 @@ def list_tables():
     """
     print("In database named %s, you have the following tables:" % database_name.rstrip('.db'))
     cur = conn.cursor()
-    cur.execute("SELECT name FROM sqlite_sequence ORDER BY name;")
+    cur.execute("SELECT name FROM sqlite_master WHERE type ='table' AND name NOT LIKE 'sqlite_%' ORDER BY name;")
     for table in cur.fetchall():
         print("\t" + table[0])
     conn.commit()
@@ -120,7 +122,6 @@ def list_columns(desired_table_name):
     """
     cur = conn.cursor()
     desired_table = cur.execute('PRAGMA table_info(%s)' % desired_table_name).fetchall()
-    print(desired_table)
     if len(desired_table) != 0:
         print("The table '%s' has the following columns:" % desired_table_name)
         print("\tName\t\tType\n"
@@ -159,29 +160,69 @@ def full_column_return(query_list):
 #
 # Simple grammar functions
 #
-
-# the following functions will be given a list of possible matching shows from prompt
-# TODO: finish this when given actual database schema
-def detail_viewer(detail_type, input):
-    show_list = find_matching_show(input)
-    cur = conn.cursor()
-    if detail_type == 'details':
-        # give all information on that show
-        # this could be a good spot for a join
-        cur.execute("......................................")
+def detail_viewer(detail_type, inp):
+    show_list = find_matching_show(inp)
+    if len(show_list) <= 0:
+        print("No shows in database containing '%s'" % inp)
     else:
-        grammar_dict = {"runtime": "corresponding runtime id", "genre": "", "network": "", "seasons": "", "status": ""}
-        detail = grammar_dict[detail_type]
-        table = "" # this should be the table we get this info from
+        cur = conn.cursor()
         if len(show_list) == 1:
-            # show detail is
-            # do sql
-            print("")
-        else:
-            for show in show_list:
-                # select <runtime> from <table that has runtime> where <name id> = <name>
-                result = cur.execute("SELECT %s FROM %s WHERE nameidtobechanged = '%s'" % (detail, table, show)).fetchone()
+            print("Your query '%s' returned one result:" % inp)
+            show = show_list[0]
+            if detail_type != 'details' and detail_type != 'network':
+                result = cur.execute("SELECT %s FROM shows WHERE name = '%s'" % (detail_type, show)).fetchone()
+                if detail_type == 'runtime':
+                    print(("\t- %s has a runtime of " + str(result[0]) + " minutes") % show)
+                elif detail_type == 'seasons':
+                    print(("\t- %s has " + str(result[0]) + " seasons") % show)
+                elif detail_type == 'status':
+                    print(("\t- %s is " + str(result[0]).lower() + " the air") % show)
+                else:
+                    print(("\t- %s is a " + result[0]) % show)
+            elif detail_type == 'details':
+                result = cur.execute("SELECT * FROM shows LEFT JOIN networks ON shows.NetworkID=networks.NetworkID "
+                                     "WHERE name = '%s'" % show).fetchone()
+                print("Details for " + result[0] + ":")
+                print("\t- Runtime: " + str(result[1]) + " minutes")
+                print("\t- Seasons: " + str(result[2]))
+                print("\t- Status: " + result[3] + " the air")
+                print("\t- Genre: " + result[4])
+                print("\t- Network: " + result[7])
 
+            else:
+                result = cur.execute("SELECT %s FROM shows LEFT JOIN networks ON shows.NetworkID=networks.NetworkID "
+                                     "WHERE name = '%s'" % (detail_type, show)).fetchone()
+                print(("\t- %s is on " + result[0]) % show)
+
+        else:
+            print("Your query '%s' returned multiple results:" % inp)
+            if detail_type != 'details' and detail_type != 'network':
+                for show in show_list:
+                    result = cur.execute("SELECT %s FROM shows WHERE name='%s';" % (detail_type, show)).fetchone()
+                    if detail_type == 'runtime':
+                        print(("\t- %s has a runtime of " + str(result[0]) + " minutes") % show)
+                    elif detail_type == 'seasons':
+                        print(("\t- %s has " + str(result[0]) + " seasons") % show)
+                    elif detail_type == 'status':
+                        print(("\t- %s is " + str(result[0]).lower() + " the air") % show)
+                    else:
+                        print(("\t- %s is a " + result[0]) % show)
+            elif detail_type == 'details':
+                for show in show_list:
+                    result = cur.execute("SELECT * FROM shows LEFT JOIN networks ON shows.NetworkID=networks.NetworkID "
+                                         "WHERE name = '%s'" % show).fetchone()
+                    print("Details for " + result[0] + ":")
+                    print("\t- Runtime: " + str(result[1]) + " minutes")
+                    print("\t- Seasons: " + str(result[2]))
+                    print("\t- Status: " + result[3] + " the air")
+                    print("\t- Genre: " + result[4])
+                    print("\t- Network: " + result[7] + "\n")
+            else:
+                for show in show_list:
+                    result = cur.execute("SELECT %s FROM shows LEFT JOIN networks ON shows.NetworkID=networks.NetworkID "
+                                         "WHERE name = '%s'" % (detail_type, show)).fetchone()
+                    print(("\t- %s is on " + result[0]) % show)
+        conn.commit()
 #
 # End Simple grammar functions
 #
@@ -295,7 +336,7 @@ class MainPrompt(Cmd):
 
 if __name__ == '__main__':
     # TODO: replace this with our database once we have it
-    database_name = "sample.db"
+    database_name = "tv_tuner.db"
     # create a database connection
     conn = create_connection('db/' + database_name)
     with conn:
