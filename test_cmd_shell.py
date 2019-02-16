@@ -157,22 +157,54 @@ def detail_viewer(detail_type, show_list):
                 result = cur.execute("SELECT %s FROM %s WHERE nameidtobechanged = '%s'" % (detail, table, show)).fetchone()
 
 # this uses that big function.
-def print_length(input_string):
-    query = query_writer(input_string)
+def search(input_string):
+    """
+    Search function, takes some paramters and returns a formatted table that shows those columns
+    :param input_string:
+    :return:
+    """
 
-    connection = create_connection("db\sample.db")
+    cursor = conn.cursor()
 
-    cursor = connection.cursor()
+    # getting the query and columns
+    query, queried_columns = query_writer(input_string)
 
-    cursor.execute(query)
+    # formatting for the print table
+    column_names = ["Name", "Runtime", "Seasons", "Status", "Genre", "NID", "NID", "Network", "Ranking"]
+    # spacing for the columns
+    column_widths = ["30", "9", "9", "8", "8", "8", "8", "10", "8"]
 
-    results = cursor.fetchall()
+    try:
+        # querying the database
+        cursor.execute(query)
+        results = cursor.fetchall()
 
-    if (len(results) == 1):
-        print(results[0][6])
-    else:
-        for result in results:
-            print(str(result[1]) + ": " + str(result[6]) + "\n")
+        # keeps track of which indices are queired, for the table printing
+        queried_indices = [0]
+
+        # fills the queried indices
+        for i in range(len(column_names)):
+            if column_names[i].lower() in queried_columns:
+                queried_indices.append(i)
+
+        # prints the column names
+        for i in range(len(column_names)):
+            if i in queried_indices:
+                print(format(column_names[i], column_widths[i] + "s"), end="")
+
+        print("\n")
+
+        # prints the rows
+        for i in range(len(results)):
+            for j in range(len(results[0])):
+                if j in queried_indices:
+                    print(format(str(results[i][j]), column_widths[j] + "s"), end="")
+            print("\n")
+
+    # if the query failed
+    except:
+        print("No results, check your query string")
+
 
 #
 # End Simple grammar functions
@@ -213,8 +245,8 @@ class MainPrompt(Cmd):
     def do_list(self, inp):
         list_table_content(inp)
 
-    def do_length(self, inp):
-        print_length(inp)
+    def do_search(self, inp):
+        search(inp)
 
     def do_runtime(self, inp):
         # do regex search for shows, return a list
@@ -263,7 +295,7 @@ class MainPrompt(Cmd):
 
 if __name__ == '__main__':
     # TODO: replace this with our database once we have it
-    database_name = "sample.db"
+    database_name = "tv_tuner.db"
     # create a database connection
     conn = create_connection('db/' + database_name)
     with conn:

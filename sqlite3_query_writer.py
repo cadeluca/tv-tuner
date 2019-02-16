@@ -1,21 +1,30 @@
-# Monolithic function to parse inputs and return a sqlite3 query
-# Currently works with the sample.db
-# Accepts as many parameters with specified column name as is input
-# Accepts one parameter without specified column name
-# For columns with numbers, allows comparison
-# For columns with strings, allows wildcard comparisons
-# Accepts parameters withe spaces
-# I can add joins, will just be more monolith
-
 def query_writer(input_string):
+    """
+    takes a string and parse it into a sql query, also returns the columns queried
+    :param input_string:
+    :return: query_string, queried_columns
+    """
+
     # splits the input into a list of strings
     inputs = str.split(input_string, " ")
+    for i in range(len(inputs)):
+        inputs[i] = inputs[i].lower()
 
-    # same beginning for all queries
-    query_string = "SELECT * FROM tracks WHERE "
+    # list of all the columns in table
+    columns = ["name", "runtime", "seasons", "status", "genre", "network", "ranking"]
 
-    # list of all the columns
-    columns = ["Name", "Composer", "Milliseconds", "Bytes", "UnitPrice"]
+    # list of columns in table if join
+    join_columns = ["network", "ranking"]
+
+    # selects when the join is neede
+    if any([input in join_columns for input in inputs]):
+        query_string = "SELECT * FROM shows LEFT JOIN networks ON shows.NetworkID = networks.NetworkID WHERE "
+    else:
+        # beginning for queries
+        query_string = "SELECT * FROM shows WHERE "
+
+    # keeps track of which columns are queried
+    queried_columns = []
 
     # counter for looping through the inputs
     counter = 0
@@ -28,16 +37,17 @@ def query_writer(input_string):
         if (inputs[counter] in columns):
             # put in column name
             query_string += inputs[counter]
+            queried_columns.append(inputs[counter])
 
             # checks for queries that can be compared, so columns of numbers
-            if (inputs[counter] in ["Milliseconds", "Bytes"]):
+            if (inputs[counter] in ["runtime", "seasons", "ranking"]):
 
                 # checks if > or < in query
                 if (">" in inputs[counter + 1]) or ("<" in inputs[counter + 1]):
                     # sql query > or <
                     query_string += " " + inputs[counter + 1] + " "
                 else:
-                    # sql query =
+                    # sql query
                     query_string += " = " + inputs[counter + 1] + " "
             else:
 
@@ -48,13 +58,8 @@ def query_writer(input_string):
                     name_query += " " + inputs[counter + 2]
                     counter += 1
 
-                # checks for wildcard input
-                if ("%" in inputs[counter + 1]) or ("_" in inputs[counter + 1]):
-                    # sql query like
-                    query_string += " LIKE '" + name_query + "' "
-                else:
-                    # sql query =
-                    query_string += " = '" + name_query + "' "
+                # sql query
+                query_string += " LIKE '%" + name_query + "%' "
 
             # increments counter by 2
             counter += 2
@@ -72,17 +77,11 @@ def query_writer(input_string):
                 name_query += " " + inputs[counter + 1]
                 counter += 1
 
-            # checks for wildcard inputs
-            if ("%" in inputs[counter]) or ("_" in inputs[counter]):
-                # sql query like
-                query_string += "Name LIKE "
-                query_string += "'" + name_query + "' "
-            else:
-                # sql query =
-                query_string += "Name = "
-                query_string += "'" + name_query + "' "
+            # sql query
+            query_string += "Name LIKE "
+            query_string += "'%" + name_query + "%' "
 
-                # increments counter by 1
+            # increments counter by 1
             counter += 1
             # do not allow more queries with unspecified column
             unspecified_query = False
@@ -92,7 +91,7 @@ def query_writer(input_string):
 
         # bad input
         else:
-            print("Too many queries without column names or column names do not exist")
+            print("Check your queries.")
             break
 
-    return query_string
+    return query_string, queried_columns
