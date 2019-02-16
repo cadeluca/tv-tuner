@@ -228,6 +228,15 @@ def detail_viewer(detail_type, inp):
         conn.commit()
 
 
+#
+# End Simple grammar functions
+#
+
+
+#
+# Complex grammar functions
+#
+
 # this uses that big function.
 def search(input_string):
     """
@@ -276,18 +285,6 @@ def search(input_string):
     # if the query failed
     except:
         print("No results, check your query string")
-
-
-#
-# End Simple grammar functions
-#
-
-
-#
-# Complex grammar functions
-#
-
-# TODO: Place the search function here
 
 #
 # End Complex grammar functions
