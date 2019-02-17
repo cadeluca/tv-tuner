@@ -32,45 +32,23 @@ def test_foo(inp):
 
 def test_exit():
     passed = True
-    if test_foo('q') != 'Bye\n':
+    if test_foo('q') != 'Tune in next time!':
         print("Failed exit 1")
         passed = False
 
-    if test_foo('x') != 'Bye\n':
+    if test_foo('x') != 'Tune in next time!':
         print("Failed exit 2")
         passed = False
 
-    if test_foo("exit") != 'Bye\n':
+    if test_foo("exit") != 'Tune in next time!':
         print("Failed exit 3")
         passed = False
 
-    if test_foo('Q') != 'Bye\n':
-        print("Failed exit 4")
-        passed = False
-
-    if test_foo('X') != 'Bye\n':
-        print("Failed exit 5")
-        passed = False
-
-    if test_foo('eXiT') != 'Bye\n':
-        print("Failed exit 6")
-        passed = False
-
-
     return passed
 
-def test_greet():
+def test_help():
     passed = True
-    if test_foo('greet') != 'Hi!\n':
-        print("Failed greet 1")
-        passed = False
-
-    if test_foo('Greet') != 'Hi!\n':
-        print("Failed greet 2")
-        passed = False
-
-    if test_foo('gReEt') != 'Hi!\n':
-        print("Failed greet 3")
+    if test_foo('help') !="\nDocumented commands (type help <topic>):\n========================================\ncolumns  exit   help  network  schema   status\ndetails  genre  list  runtime  seasons  tables\n\n":
         passed = False
 
     return passed
@@ -79,8 +57,8 @@ def test_driver():
     passed = True
     if test_exit():
         print("Passed Exit")
-    elif test_greet():
-        print("Passed Greet")
+    if test_help():
+        print("Passed Help")
     else:
         passed = False
 
