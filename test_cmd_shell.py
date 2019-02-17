@@ -253,6 +253,11 @@ def search(input_string):
         cursor.execute(query)
         results = cursor.fetchall()
 
+        # check in no results
+        if (len(results) == 0):
+            print("No results, check your query string")
+            return ""
+
         # keeps track of which indices are queired, for the table printing
         queried_indices = [0]
 

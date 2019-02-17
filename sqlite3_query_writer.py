@@ -39,8 +39,15 @@ def query_writer(input_string):
             query_string += inputs[counter]
             queried_columns.append(inputs[counter])
 
+            # checks if no parameter after keyword
+            if (counter < len(inputs)-1) and (inputs[counter+1] in columns):
+                counter += 1
+                query_string += " IS NOT NULL"
+            elif (counter == len(inputs)-1):
+                counter += 1
+                query_string += " IS NOT NULL"
             # checks for queries that can be compared, so columns of numbers
-            if (inputs[counter] in ["runtime", "seasons", "ranking"]):
+            elif (inputs[counter] in ["runtime", "seasons", "ranking"]):
 
                 # checks if > or < in query
                 if (">" in inputs[counter + 1]) or ("<" in inputs[counter + 1]):
@@ -49,6 +56,7 @@ def query_writer(input_string):
                 else:
                     # sql query
                     query_string += " = " + inputs[counter + 1] + " "
+                counter += 2
             else:
 
                 # this code gets the whole query with the spaces
@@ -60,9 +68,8 @@ def query_writer(input_string):
 
                 # sql query
                 query_string += " LIKE '%" + name_query + "%' "
+                counter += 2
 
-            # increments counter by 2
-            counter += 2
             # adds AND to allow more conditions to be tacked on
             if (counter < len(inputs)):
                 query_string += " AND "
