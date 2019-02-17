@@ -19,9 +19,6 @@ from sqlite3 import Error
 import cli_animations
 from sqlite3_query_writer import query_writer
 
-# Debug variable
-debug = True
-
 
 #
 # Helper functions
@@ -61,8 +58,8 @@ def list_tables():
     """
     print("In database named %s, you have the following tables:" % database_name.rstrip('.db'))
     cur = conn.cursor()
-    cur.execute("SELECT name FROM sqlite_master WHERE type ='table' AND name NOT LIKE 'sqlite_%' ORDER BY name;")
-    for table in cur.fetchall():
+    for table in cur.execute('SELECT name FROM sqlite_master WHERE type =\'table\' '
+                             'AND name NOT LIKE \'sqlite_%\' ORDER BY name;').fetchall():
         print("\t" + table[0])
     conn.commit()
 
@@ -93,12 +90,12 @@ def list_table_content(inp):
         table_list.append(table[0])
     if inp in table_list:
         headers = []
-        for i in cur.execute("PRAGMA table_info(%s)" % inp).fetchall():
-            headers.append(i[1])
+        for table_info in cur.execute("PRAGMA table_info(%s)" % inp).fetchall():
+            headers.append(table_info[1])
         # TODO: format output
         print(headers)
-        for j in cur.execute("SELECT * FROM %s" % inp).fetchall():
-            print(j)
+        for table_content in cur.execute("SELECT * FROM %s" % inp).fetchall():
+            print(table_content)
     else:
         print("No matching table '%s'" % inp)
     conn.commit()
@@ -119,7 +116,6 @@ def list_columns(desired_table_name):
             print("\t" + column[1] + "\t\t\t" + str(column[2]).lower())
     else:
         print("The table '%s' is not in the database." % desired_table_name)
-
     conn.commit()
 
 
@@ -164,6 +160,7 @@ def detail_viewer(detail_type, inp):
         if len(show_list) == 1:
             print("Your query '%s' returned one result:" % inp)
             show = show_list[0]
+            # result formatting for single detail query that does not use a join
             if detail_type != 'details' and detail_type != 'network':
                 result = cur.execute("SELECT %s FROM shows WHERE name = '%s'" % (detail_type, show)).fetchone()
                 if detail_type == 'runtime':
@@ -173,7 +170,8 @@ def detail_viewer(detail_type, inp):
                 elif detail_type == 'status':
                     print(("\t- %s is " + str(result[0]).lower() + " the air") % show)
                 else:
-                    print(("\t- %s is a " + result[0]) % show)
+                    print(("\t- %s is a " + result[0] + " show") % show)
+            # result formatting for listing every detail on a match
             elif detail_type == 'details':
                 result = cur.execute("SELECT * FROM shows LEFT JOIN networks ON shows.NetworkID=networks.NetworkID "
                                      "WHERE name = '%s'" % show).fetchone()
@@ -183,7 +181,7 @@ def detail_viewer(detail_type, inp):
                 print("\t- Status: " + result[3] + " the air")
                 print("\t- Genre: " + result[4])
                 print("\t- Network: " + result[7])
-
+            # must use join to get the network detail, so a different query is needed
             else:
                 result = cur.execute("SELECT %s FROM shows LEFT JOIN networks ON shows.NetworkID=networks.NetworkID "
                                      "WHERE name = '%s'" % (detail_type, show)).fetchone()
@@ -202,7 +200,7 @@ def detail_viewer(detail_type, inp):
                     elif detail_type == 'status':
                         print(("\t- %s is " + str(result[0]).lower() + " the air") % show)
                     else:
-                        print(("\t- %s is a " + result[0]) % show)
+                        print(("\t- %s is a " + result[0] + " show") % show)
             elif detail_type == 'details':
                 for show in show_list:
                     result = cur.execute("SELECT * FROM shows LEFT JOIN networks ON shows.NetworkID=networks.NetworkID "
@@ -233,7 +231,7 @@ def detail_viewer(detail_type, inp):
 # this uses that big function.
 def search(input_string):
     """
-    Search function, takes some paramters and returns a formatted table that shows those columns
+    Search function, takes some parameters and returns a formatted table that shows those columns
     :param input_string:
     :return:
     """
@@ -254,7 +252,7 @@ def search(input_string):
         results = cursor.fetchall()
 
         # check in no results
-        if (len(results) == 0):
+        if len(results) == 0:
             print("No results, check your query string")
             return ""
 
@@ -301,7 +299,7 @@ class MainPrompt(Cmd):
     function as a parameter. For example, help_runtime is called as 'help runtime'.
     """
 
-    # the string to be displayed as
+    # the string to be displayed as a prompt
     prompt = '<tvTuner> '
 
     def do_exit(self, inp):
@@ -309,7 +307,7 @@ class MainPrompt(Cmd):
         return True
 
     def help_exit(self):
-        print('Exits the application. Shorthand: `x` `q` `Ctrl-D`.')
+        print('Exits the application. Shorthand: \'x\' \'q\' \'Ctrl-D\'.')
 
     def do_tables(self, inp):
         list_tables()
@@ -336,6 +334,13 @@ class MainPrompt(Cmd):
 
     def do_search(self, inp):
         search(inp)
+
+    # TODO: EXPLAIN THE GRAMMAR TO THE USER AS CONCISELY AS POSSIBLE
+    def help_search(self):
+        print('Searches through database for desired show results. \nUsage:'
+              '\n\tsearch - returns all names of shows in database'
+              '\n\tsearch \'column\' - returns all names of shows with the specified column added'
+              '\n\tsearch \'column\' \'column_entry\' - returns all names of show filtered by specified column')
 
     def do_runtime(self, inp):
         if len(inp) > 0:
@@ -424,11 +429,8 @@ class MainPrompt(Cmd):
 
 
 if __name__ == '__main__':
-    # TODO: replace this with our database once we have it
-    database_name = "tv_tuner.db"
     # create a database connection
+    database_name = 'tv_tuner.db'
     conn = create_connection(database_name)
     with conn:
-        if debug:
-            print("connected!")
         MainPrompt().cmdloop(cli_animations.intro())
