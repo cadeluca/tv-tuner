@@ -164,11 +164,19 @@ def full_column_return(query_list):
 # Simple grammar functions
 #
 def detail_viewer(detail_type, inp):
+    """ queries database for the specified detail on the
+        given input; either a single name or list of matches
+    :param detail_type: corresponding command name and column name for the detail
+    :param inp: the string user input of a show
+    """
+    # get a list of possible matches from the inputted string
     show_list = find_matching_show(inp)
+    # if empty; no matches
     if len(show_list) <= 0:
         print("No shows in database containing '%s'" % inp)
     else:
         cur = conn.cursor()
+        # formatted results for single item match
         if len(show_list) == 1:
             print("Your query '%s' returned one result:" % inp)
             show = show_list[0]
@@ -198,6 +206,7 @@ def detail_viewer(detail_type, inp):
                 print(("\t- %s is on " + result[0]) % show)
 
         else:
+            # formatted results for multiple matches
             print("Your query '%s' returned multiple results:" % inp)
             if detail_type != 'details' and detail_type != 'network':
                 for show in show_list:
@@ -283,6 +292,9 @@ def search(input_string):
             print("\n")
 
     # if the query failed
+    # TODO: would:
+    # sqlite3.OperationalError
+    # work here?
     except:
         print("No results, check your query string")
 
@@ -292,6 +304,15 @@ def search(input_string):
 
 
 class MainPrompt(Cmd):
+    """
+    Each function that begins with 'do_' is interpreted as a command in
+    the shell. For example, do_runtime is called as runtime by the user.
+
+    Each function with 'help_' corresponds to calling the help command with the connected
+    function as a parameter. For example, help_runtime is called as 'help runtime'.
+    """
+
+    # the string to be displayed as
     prompt = '<tvTuner> '
 
     def do_exit(self, inp):
