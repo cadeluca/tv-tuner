@@ -47,17 +47,9 @@ def find_matching_show(searched_string):
     :return: list of matches
     """
     cur = conn.cursor()
-    # TODO: replace title and employees with the corresponding values from new db
     results = cur.execute("SELECT name FROM shows WHERE name LIKE '%"+searched_string+"%';").fetchall()
-    results_list = []
-    for result in results:
-        if debug:
-            print(result[0])
-        results_list.append(result[0])
     conn.commit()
-    # if debug:
-    #     print(results_list)
-    return results_list
+    return [result[0] for result in results]
 
 
 #
@@ -81,8 +73,7 @@ def show_schema():
     """
     print("Displaying database schema:\n")
     cur = conn.cursor()
-    cur.execute("SELECT name FROM sqlite_master WHERE type='table';")
-    for table in cur.fetchall():
+    for table in cur.execute("SELECT name FROM sqlite_master WHERE type='table';").fetchall():
         print("Table Name: " + str(table[0]))
         for row in cur.execute("PRAGMA table_info(%s)" % table).fetchall():
             print(row)
@@ -98,21 +89,16 @@ def list_table_content(inp):
     table_list = []
     cur = conn.cursor()
     # should try surrounding this in a try block and doing %s with the table name and just boot out on exception
-    cur.execute("SELECT name FROM sqlite_master WHERE type='table';")
-    for table in cur.fetchall():
+    for table in cur.execute("SELECT name FROM sqlite_master WHERE type='table';").fetchall():
         table_list.append(table[0])
     if inp in table_list:
         headers = []
-        cur.execute("PRAGMA table_info(%s)" % inp)
-        for i in cur.fetchall():
+        for i in cur.execute("PRAGMA table_info(%s)" % inp).fetchall():
             headers.append(i[1])
         # TODO: format output
-
         print(headers)
-        cur.execute("SELECT * FROM %s" % inp)
-        for j in cur.fetchall():
+        for j in cur.execute("SELECT * FROM %s" % inp).fetchall():
             print(j)
-
     else:
         print("No matching table '%s'" % inp)
     conn.commit()
@@ -146,13 +132,11 @@ def full_column_return(query_list):
     column = query_list[1]
     cur = conn.cursor()
     try:
-        cur.execute('SELECT %s FROM %s' % (column, table))
-        result = cur.fetchall()
+        result = cur.execute('SELECT %s FROM %s' % (column, table)).fetchall()
         for results in result:
             print(results[0])
     except sqlite3.OperationalError as err:
         print(err)
-
     conn.commit()
 
 
