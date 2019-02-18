@@ -428,6 +428,12 @@ class MainPrompt(Cmd):
             return self.do_exit(inp)
         print("Unrecognized command: {}".format(inp))
 
+def mainFunction():
+    global database_name
+    database_name= 'tv_tuner.db'
+    global conn
+    conn = create_connection(database_name)
+
 
 def mainFunction():
     global database_name
