@@ -44,6 +44,7 @@ def find_matching_show(searched_string):
     :return: list of matches
     """
     cur = conn.cursor()
+    conn.text_factory = str
     results = cur.execute("SELECT name FROM shows WHERE name LIKE '%"+searched_string+"%';").fetchall()
     conn.commit()
     return [result[0] for result in results]
@@ -267,7 +268,7 @@ def search(input_string):
         # prints the column names
         for i in range(len(column_names)):
             if i in queried_indices:
-                print(format(column_names[i], column_widths[i] + "s"), end="")
+                print(format(column_names[i], column_widths[i] + "s"), "")
 
         print("\n")
 
@@ -275,7 +276,7 @@ def search(input_string):
         for i in range(len(results)):
             for j in range(len(results[0])):
                 if j in queried_indices:
-                    print(format(str(results[i][j]), column_widths[j] + "s"), end="")
+                    print(format(str(results[i][j]), column_widths[j] + "s"), "")
             print("\n")
 
     # if the query failed
@@ -427,10 +428,15 @@ class MainPrompt(Cmd):
             return self.do_exit(inp)
         print("Unrecognized command: {}".format(inp))
 
+def mainFunction():
+    global database_name
+    database_name= 'tv_tuner.db'
+    global conn
+    conn = create_connection(database_name)
+
 
 if __name__ == '__main__':
     # create a database connection
-    database_name = 'tv_tuner.db'
-    conn = create_connection(database_name)
+    mainFunction()
     with conn:
         MainPrompt().cmdloop(cli_animations.intro())
