@@ -3,13 +3,11 @@
 """
 CS 205: Warm-up Project
 UVM Spring Semester 2019
-
 Team members:
 Christian DeLuca
 Jiangyong Yu
 Megan Doyle
 Dale Larie
-
 CLI for data on television shows
 """
 
@@ -44,7 +42,6 @@ def find_matching_show(searched_string):
     :return: list of matches
     """
     cur = conn.cursor()
-    conn.text_factory = str
     results = cur.execute("SELECT name FROM shows WHERE name LIKE '%"+searched_string+"%';").fetchall()
     conn.commit()
     return [result[0] for result in results]
@@ -268,7 +265,7 @@ def search(input_string):
         # prints the column names
         for i in range(len(column_names)):
             if i in queried_indices:
-                print(format(column_names[i], column_widths[i] + "s"), "")
+                print(format(column_names[i], column_widths[i] + "s"), end="")
 
         print("\n")
 
@@ -276,7 +273,7 @@ def search(input_string):
         for i in range(len(results)):
             for j in range(len(results[0])):
                 if j in queried_indices:
-                    print(format(str(results[i][j]), column_widths[j] + "s"), "")
+                    print(format(str(results[i][j]), column_widths[j] + "s"), end="")
             print("\n")
 
     # if the query failed
@@ -295,7 +292,6 @@ class MainPrompt(Cmd):
     """
     Each function that begins with 'do_' is interpreted as a command in
     the shell. For example, do_runtime is called as runtime by the user.
-
     Each function with 'help_' corresponds to calling the help command with the connected
     function as a parameter. For example, help_runtime is called as 'help runtime'.
     """
@@ -429,36 +425,9 @@ class MainPrompt(Cmd):
         print("Unrecognized command: {}".format(inp))
 
 
-def mainFunction():
-    global database_name
-    database_name= 'tv_tuner.db'
-    global conn
-    conn = create_connection(database_name)
-
-
-def mainFunction():
-    global database_name
-    database_name= 'tv_tuner.db'
-    global conn
-    conn = create_connection(database_name)
-
-
-def mainFunction():
-    global database_name
-    database_name= 'tv_tuner.db'
-    global conn
-    conn = create_connection(database_name)
-
-
-def mainFunction():
-    global database_name
-    database_name= 'tv_tuner.db'
-    global conn
-    conn = create_connection(database_name)
-
-
 if __name__ == '__main__':
     # create a database connection
-    mainFunction()
+    database_name = 'tv_tuner.db'
+    conn = create_connection(database_name)
     with conn:
         MainPrompt().cmdloop(cli_animations.intro())

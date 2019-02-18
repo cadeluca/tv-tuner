@@ -82,7 +82,7 @@ def test_genre():
 
 def test_driver():
     passed = True
-    if test_funtions():
+    if test_genre():
         print("Passed functions")
     if test_exit():
         print("Passed Exit")
