@@ -425,9 +425,15 @@ class MainPrompt(Cmd):
         print("Unrecognized command: {}".format(inp))
 
 
+def mainFunction():
+    global database_name
+    database_name= 'tv_tuner.db'
+    global conn
+    conn = create_connection(database_name)
+
+
 if __name__ == '__main__':
     # create a database connection
-    database_name = 'tv_tuner.db'
-    conn = create_connection(database_name)
+    mainFunction()
     with conn:
         MainPrompt().cmdloop(cli_animations.intro())
