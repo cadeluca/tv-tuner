@@ -161,7 +161,7 @@ def detail_viewer(detail_type, inp):
             show = show_list[0]
             # result formatting for single detail query that does not use a join
             if detail_type != 'details' and detail_type != 'network':
-                result = cur.execute("SELECT %s FROM shows WHERE name = '%s'" % (detail_type, show)).fetchone()
+                result = cur.execute('SELECT ' + detail_type + ' FROM shows WHERE name="' + show + '";').fetchone()
                 if detail_type == 'runtime':
                     print(("\t- %s has a runtime of " + str(result[0]) + " minutes") % show)
                 elif detail_type == 'seasons':
@@ -172,8 +172,8 @@ def detail_viewer(detail_type, inp):
                     print(("\t- %s is a " + result[0] + " show") % show)
             # result formatting for listing every detail on a match
             elif detail_type == 'details':
-                result = cur.execute("SELECT * FROM shows LEFT JOIN networks ON shows.NetworkID=networks.NetworkID "
-                                     "WHERE name = '%s'" % show).fetchone()
+                result = cur.execute('SELECT * FROM shows LEFT JOIN networks ON shows.NetworkID=networks.NetworkID '
+                                     'WHERE name="' + show + '";').fetchone()
                 print("Details for " + result[0] + ":")
                 print("\t- Runtime: " + str(result[1]) + " minutes")
                 print("\t- Seasons: " + str(result[2]))
@@ -182,8 +182,8 @@ def detail_viewer(detail_type, inp):
                 print("\t- Network: " + result[7])
             # must use join to get the network detail, so a different query is needed
             else:
-                result = cur.execute("SELECT %s FROM shows LEFT JOIN networks ON shows.NetworkID=networks.NetworkID "
-                                     "WHERE name = '%s'" % (detail_type, show)).fetchone()
+                result = cur.execute('SELECT ' + detail_type + ' FROM shows LEFT JOIN networks ON shows.NetworkID=networks.NetworkID '
+                                     'WHERE name="' + show + '";').fetchone()
                 print(("\t- %s is on " + result[0]) % show)
 
         else:
@@ -202,8 +202,8 @@ def detail_viewer(detail_type, inp):
                         print(("\t- %s is a " + result[0] + " show") % show)
             elif detail_type == 'details':
                 for show in show_list:
-                    result = cur.execute("SELECT * FROM shows LEFT JOIN networks ON shows.NetworkID=networks.NetworkID "
-                                         "WHERE name = '%s'" % show).fetchone()
+                    result = cur.execute('SELECT * FROM shows LEFT JOIN networks ON shows.NetworkID=networks.NetworkID '
+                                         'WHERE name="' + show + '";').fetchone()
                     print("Details for " + result[0] + ":")
                     print("\t- Runtime: " + str(result[1]) + " minutes")
                     print("\t- Seasons: " + str(result[2]))
@@ -212,8 +212,9 @@ def detail_viewer(detail_type, inp):
                     print("\t- Network: " + result[7] + "\n")
             else:
                 for show in show_list:
-                    result = cur.execute("SELECT %s FROM shows LEFT JOIN networks ON shows.NetworkID=networks.NetworkID "
-                                         "WHERE name = '%s'" % (detail_type, show)).fetchone()
+                    result = cur.execute(
+                        'SELECT ' + detail_type + ' FROM shows LEFT JOIN networks ON shows.NetworkID=networks.NetworkID '
+                        'WHERE name="' + show + '";').fetchone()
                     print(("\t- %s is on " + result[0]) % show)
         conn.commit()
 
