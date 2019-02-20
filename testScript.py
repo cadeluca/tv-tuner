@@ -270,70 +270,30 @@ def test_columns():
         passed = False
         print("Failed coloumns 8")
 
-    if test_foo("columns shows runtime") != ("30\n30
-60
-30
-60
-30
-30
-60
-60
-90
-60
-60
-60
-60
-60
-30
-60
-30
-30
-30
-30
-30
-45
-60
-60
-60
-30
-30
-50
-30
-60
-60
-60
-60
-30
-30
-60
-30
-60
-60
-30
-60
-60
-60
-60
-30
-"
-                                             ):
+    if test_foo("columns shows runtime") != ("30\n30\n60\n30\n60\n30\n30\n60\n60\n90\n60\n60\n60\n60\n60\n30\n60\n30\n"
+                                             "30\n30\n30\n30\n45\n60\n60\n60\n30\n30\n50\n30\n60\n60\n60\n60\n30\n30\n"
+                                             "60\n30\n60\n60\n30\n60\n60\n60\n60\n30\n"):
         passed = False
         print("failed columns 9")
 
-    if test_foo("columns shows seasons") != ("12\n162\n5\n5\n1\n7\n6\n6\n18\n23\n10\n40\n7\n2\n2\n6\n8\n7\n8\n5\n11\n35"
-                                             "\n2\n5\n4\n1\n9\n2\n2\n3\n"):
+    if test_foo("columns shows seasons") != ("12\n162\n5\n5\n1\n7\n6\n6\n18\n23\n10\n40\n7\n2\n2\n6\n8\n7\n8\n5\n11\n"
+                                             "35\n2\n5\n4\n1\n9\n2\n2\n3\n5\n20\n5\n24\n49\n2\n5\n10\n5\n2\n8\n14\n17\n"
+                                             "7\n7\n6\n"):
         passed = False
         print("failed columns 10")
 
-    if test_foo("columns shows status") !=("On\nOn\nOff\nOn\nOn\nOff\nOn\nOff\nOn\nOn\nOn\nOn\nOff\nOn\nOff\nOff\nOn"
-                                           "\nOff\nOff\nOn\nOff\nOn\nOn\nOff\nOn\nOn\nOn\nOn\nOn\nOff\n"):
+    if test_foo("columns shows status") !=("On\nOn\nOn\nOn\nOff\nOn\nOff\nOn\nOn\nOn\nOn\nOff\nOn\nOff\nOff\nOn\nOff\n"
+                                           "Off\nOn\nOff\nOn\nOn\nOff\nOn\nOn\nOn\nOn\nOn\nOff\nOff\nOn\nOn\nOn\nOn\n"
+                                           "On\nOn\nOn\nOff\nOn\nOn\nOn\nOn\nOff\nOn\nOff\n"):
         passed = False
         print("failed columns 11")
 
-    if test_foo("columns shows genre") != ("Comedy\nReality\nReality\nComedy\nThriller\nComedy\nComedy\nReality"
-                                           "\nCompetition\nReality\nDrama\nCompetition\nReality\nDrama\nThriller"
-                                           "\nComedy\nHorror\nComedy\nComedy\nComedy\nCrime\nGame show\nCompetition"
-                                           "\nDrama\nHorror\nThriller\nComedy\nDrama\nReality\nComedy\n"):
+    if test_foo("columns shows genre") != ("Comedy\nReality\nReality\nComedy\nThriller\nComedy\nComedy\nReality\n"
+                                           "Competition\nReality\nDrama\nCompetition\nReality\nDrama\nThriller\n"
+                                           "Comedy\nHorror\nComedy\nComedy\nComedy\nCrime\nGame show\nCompetition\n"
+                                           "Drama\nHorror\nThriller\nComedy\nDrama\nReality\nComedy\nThriller\nReality\n"
+                                           "Reality\nCompetition\nChildren's\nDrama\nDrama\nComedy\nReality\nEducational\n"
+                                           "Comedy\nCompetition\n\nCompetition\nReality\nReality\nCartoon\n"):
         passed = False
         print("Failed columns 12")
 
