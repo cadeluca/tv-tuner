@@ -129,7 +129,7 @@ def full_column_return(query_list):
         for results in result:
             print(results[0])
     except sqlite3.OperationalError as err:
-        print("Encountered an error: " + err)
+        print("Encountered an error: " + str(err))
     conn.commit()
 
 
@@ -276,10 +276,6 @@ def search(input_string):
                     print(format(str(results[i][j]), column_widths[j] + "s"), end="")
             print("\n")
 
-    # if the query failed
-    # TODO: would:
-    # sqlite3.OperationalError
-    # work here?
     except:
         print("No results, check your query string")
 
