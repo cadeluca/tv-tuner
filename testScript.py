@@ -91,6 +91,7 @@ def test_genre():
     #
     return passed
 
+
 def test_network():
     # testing correct use
     passed = True
@@ -599,7 +600,12 @@ def test_search():
         passed = False
         print("failed search 23")
 
-    if test_foo("search ranking >50") != "Name                          Ranking \n\nChopped                       55      \n\n":
+    if test_foo("search ranking >50") != "Name                          Ranking \n\nChopped                       55      \n\n"\
+                                        "\n\nAmerica's Next Top Model      67   \n\nClaws                         54  \n\n"\
+                                        "\n\nVikings                       66   \n\nMan vs. Wild                  70 \n\n"\
+                                        "\n\nMars                          71   \n\nImpractical Jokers            89 \n\n"\
+                                        "\n\nProject Runway                77   \n\nDance Moms                    53 \n\n"\
+                                        "\n\nThe Flintstones               102      \n\n":
         passed = False
         print("failed search 24")
 

@@ -254,7 +254,7 @@ def search(input_string):
             print("No results, check your query string")
             return ""
 
-        # keeps track of which indices are queired, for the table printing
+        # keeps track of which indices are queried, for the table printing
         queried_indices = [0]
 
         # fills the queried indices
