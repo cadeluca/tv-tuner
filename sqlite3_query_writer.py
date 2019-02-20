@@ -67,7 +67,7 @@ def query_writer(input_string):
                     counter += 1
 
                 # sql query
-                query_string += " LIKE '%" + name_query + "%' "
+                query_string += """ LIKE "%""" + name_query + """%" """
                 counter += 2
 
             # adds AND to allow more conditions to be tacked on
@@ -86,7 +86,7 @@ def query_writer(input_string):
 
             # sql query
             query_string += "Name LIKE "
-            query_string += "'%" + name_query + "%' "
+            query_string += """"%""" + name_query + """%" """
 
             # increments counter by 1
             counter += 1
