@@ -1290,11 +1290,11 @@ The Flintstones               102
 
     if test_foo("search ranking <2") != ("""Name                          Ranking 
 
+Parks and Recreation          1       
+
 Forensic Files                1       
 
 Jeapardy                      1       
-
-Parks and Recreation          1       
 
 """):
         passed = False
