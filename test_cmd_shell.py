@@ -107,10 +107,10 @@ def list_columns(desired_table_name):
     desired_table = cur.execute('PRAGMA table_info(%s)' % desired_table_name).fetchall()
     if len(desired_table) != 0:
         print("The table '%s' has the following columns:" % desired_table_name)
-        print("\tName\t\tType\n"
-              "\t------\t\t\t------")
+        print("\tName\t\t\t\tType\n"
+              "\t------\t\t\t\t------")
         for column in desired_table:
-            print("\t" + column[1] + "\t\t\t" + str(column[2]).lower())
+            print("\t" + column[1] + "\t\t\t\t" + str(column[2]).lower())
     else:
         print("The table '%s' is not in the database." % desired_table_name)
     conn.commit()
@@ -129,7 +129,7 @@ def full_column_return(query_list):
         for results in result:
             print(results[0])
     except sqlite3.OperationalError as err:
-        print(err)
+        print("Encountered an error: " + err)
     conn.commit()
 
 
@@ -242,7 +242,7 @@ def search(input_string):
     # formatting for the print table
     column_names = ["Name", "Runtime", "Seasons", "Status", "Genre", "NID", "NID", "Network", "Ranking"]
     # spacing for the columns
-    column_widths = ["30", "9", "9", "8", "8", "8", "8", "10", "8"]
+    column_widths = ["30", "9", "9", "8", "8", "8", "8", "20", "8"]
 
     try:
         # querying the database
@@ -401,18 +401,21 @@ class MainPrompt(Cmd):
         print('Returns the full details of a show and/or best matching shows, including: network, season count,'
               'runtime, genre, and on/off air status. \nUsage:\n\truntime \'show_name\'')
 
-    # TODO: see if we actually need to follow the pycharm suggestion to make it static
-    @staticmethod
-    def do_columns(inp):
+    def do_columns(self, inp):
         params = inp.split()
-        if len(params) == 2:
-            full_column_return(params)
-        elif len(params) == 1:
-            list_columns(params[0])
-        else:
-            print("Invalid number of arguments.\nUsage:"
+        if inp == 'table':
+            print("Invalid table name.\nUsage:"
                   "\n\tcolumns 'table' - returns a list of columns in that table."
                   "\n\tcolumns 'table' 'column' - returns the contents of that column from that table.")
+        else:
+            if len(params) == 2:
+                full_column_return(params)
+            elif len(params) == 1:
+                list_columns(params[0])
+            else:
+                print("Invalid number of arguments.\nUsage:"
+                      "\n\tcolumns 'table' - returns a list of columns in that table."
+                      "\n\tcolumns 'table' 'column' - returns the contents of that column from that table.")
 
     def help_columns(self):
         print("Returns either a list of the columns in a table or the contents.\nUsage:"
