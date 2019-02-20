@@ -49,17 +49,19 @@ def test_exit():
 
 def test_help():
     passed = True
+    # testing help
     if test_foo('help') !="\nDocumented commands (type help <topic>):\n========================================\ncolumns  exit   help  network  schema  seasons  tables\ndetails  genre  list  runtime  search  status \n\n":
         print("Failed help 1")
         passed = False
-
+    # testong ? to pull up help
     if test_foo('?') !="\nDocumented commands (type help <topic>):\n========================================\ncolumns  exit   help  network  schema  seasons  tables\ndetails  genre  list  runtime  search  status \n\n":
         print("Failed help 2")
         passed = False
-
+    # testing help exit
     if test_foo('help exit') != 'Exits the application. Shorthand: \'x\' \'q\' \'Ctrl-D\'.\n':
         print("Failed help exit")
         passed = False
+    # testing schema help
     if test_foo("help schema") != "Displays the schema for the database. Note: this is not the same as the SQL schema command that provides an exportable file to be used to recreate the database.\n":
         passed = False
         print("failed help schema")
@@ -69,16 +71,20 @@ def test_help():
 
 def test_genre():
     passed = True
+    # testing genre of known lower case input
     if test_foo("genre house") !="Your query 'house' returned one result:\n\t- House Hunters is a Reality show\n":
         passed = False
-        print("Failed genre 1")
+        print("Failed genre 0")
+    #     testing genre of capticalized input
     if test_foo("genre HoUse") !="Your query 'HoUse' returned one result:\n\t- House Hunters is a Reality show\n":
         passed = False
         print("Failed genre 1")
+    #     testing genre incorrect use
     if test_foo('genre') !=("Invalid number of arguments.\nUsage:"
                   "\n\tgenre 'show' - returns the genre of any matching shows from your inputted string.\n"):
         passed = False
         print("Failed genre 2")
+    #     testing misspelled or incomplete words
     if test_foo('genre hosu') != "No shows in database containing 'hosu'\n":
         passed = False
         print("failed genre 3")
@@ -86,14 +92,20 @@ def test_genre():
     return passed
 
 def test_network():
+    # testing correct use
     passed = True
+    if test_foo("network HoUse") !="Your query 'HoUse' returned one result:\n\t- House Hunters is on HGTV\n":
+        passed = False
+        print("Failed network 0")
     if test_foo("network house") !="Your query 'house' returned one result:\n\t- House Hunters is on HGTV\n":
         passed = False
         print("Failed network 1")
+    #     testing incorrect use
     if test_foo('network') !=("Invalid number of arguments.\nUsage:"
                   "\n\tnetwork 'show' - returns the network of any matching shows from your inputted string.\n"):
         passed = False
         print("Failed network 2")
+    #     testing misspelled or incomplete
     if test_foo('genre hosu') != "No shows in database containing 'hosu'\n":
         passed = False
         print("failed network 3")
@@ -103,11 +115,12 @@ def test_network():
 
 def test_schema():
     passed = True
-    if test_foo('schema')!= ("Displaying database schema:\n\nTable Name: shows\n(0, 'Name', 'VARCHAR (40)', 0, None, 1)"
-                "\n(1, 'Runtime', 'INTEGER', 0, None, 0)\n(2, 'Seasons', 'INTEGER', 0, None, 0)\n(3, 'Status', 'VARCHAR (20)', 0, None, 0)"
-                "\n(4, 'Genre', 'VARCHAR (20)', 0, None, 0)\n(5, 'NetworkID', 'INTEGER', 0, None, 0)"  
-                "\n\n\nTable Name: networks\n(0, 'NetworkID', 'INTEGER', 0, None, 1)"
-                "\n(1, 'Network', 'VARCHAR (20)', 0, None, 0)\n(2, 'Ranking', 'INTEGER', 0, None, 0)\n\n\n"):
+    # testing that schema comes up correctly
+    if test_foo('schema') != ("Displaying database schema:\n\nTable Name: networks\n(0, 'NetworkID', 'INTEGER', 0, None, 0)"
+                              "\n(1, 'Network', 'VARCHAR (20)', 0, None, 1)\n(2, 'Ranking', 'INTEGER', 0, None, 0)\n\n\n"
+                              "Table Name: shows\n(0, 'Name', 'VARCHAR (40)', 0, None, 1)\n(1, 'Runtime', 'INTEGER', 0, None, 0)"
+                              "\n(2, 'Seasons', 'INTEGER', 0, None, 0)\n(3, 'Status', 'VARCHAR (20)', 0, None, 0)\n"
+                              "(4, 'Genre', 'VARCHAR (20)', 0, None, 0)\n(5, 'NetworkID', 'INTEGER', 0, None, 0)\n\n\n"):
         passed = False
         print("failed schema 1")
 
@@ -116,18 +129,22 @@ def test_schema():
 
 def test_seasons():
     passed = True
+    # testing incorrect use of seasons
     if test_foo("seasons") != ("Invalid number of arguments.\nUsage:"""
                                "\n\tseasons 'show' - returns the number of seasons of any matching shows from your inputted string.\n"):
         passed = False
         print("failed seasons 1")
+    #     testing correct use with caps
     if test_foo("seasons House") != ("Your query 'House' returned one result:"""
                                      "\n\t- House Hunters has 162 seasons\n"):
         passed = False
         print("Failed seasons 2")
+        # testing correct use without caps
     if test_foo("seasons house") != ("Your query 'house' returned one result:"""
                                      "\n\t- House Hunters has 162 seasons\n"):
         passed = False
         print("Failed seasons 3")
+    #     testing correct use bad spelling or incomplete
     if test_foo('seasons hosu') != "No shows in database containing 'hosu'\n":
         passed = False
         print("failed seasons 4")
@@ -137,6 +154,7 @@ def test_seasons():
 
 def test_tables():
     passed = True
+    # testing correct use of tables
     if test_foo("tables") != ("In database named tv_tuner, you have the following tables:\n\tnetworks\n\tshows\n"):
         passed = False
         print("failed tables 1")
@@ -145,11 +163,13 @@ def test_tables():
 
 def test_details():
     passed = True
+    # testing incorrect use of details
     if test_foo("details") != ("Invalid number of arguments.\nUsage:"
             "\n\tdetails 'show' - returns the details of any matching shows, including: network, season count, runtime, "
             "genre, and on/off air status from your inputted string.\n"):
         passed = False
         print("failed details 1")
+    #     testing correct use lower case
     if test_foo("details house") != ("Your query 'house' returned one result:"
                                      "\nDetails for House Hunters:"
                                      "\n\t- Runtime: 30 minutes"
@@ -160,8 +180,8 @@ def test_details():
         passed = False
         print("failed details 2")
 
-
-    if test_foo("details House") != ("Your query 'House' returned one result:"
+    # testing correct use caps
+    if test_foo("details HoUse") != ("Your query 'HoUse' returned one result:"
                                     "\nDetails for House Hunters:"
                                     "\n\t- Runtime: 30 minutes"
                                     "\n\t- Seasons: 162"
@@ -170,7 +190,7 @@ def test_details():
                                     "\n\t- Network: HGTV\n"):
         passed = False
         print("failed details 3")
-
+    # testing correct use bad spelling
     if test_foo("details hosu") != "No shows in database containing 'hosu'\n":
         passed = False
         print("failed details 4")
@@ -179,12 +199,13 @@ def test_details():
 
 def test_columns():
     passed = True
-
+    # testing incorrect use
     if test_foo("columns") != ("Invalid number of arguments.\nUsage:"
                                "\n\tcolumns 'table' - returns a list of columns in that table."
                                "\n\tcolumns 'table' 'column' - returns the contents of that column from that table.\n"):
         passed = False
         print("Failed Columns 1")
+    #     testing correct use shows
     if test_foo("columns shows") != ("The table 'shows' has the following columns:"
                                      "\n\tName\t\tType"
                                      "\n\t------\t\t\t------"
@@ -196,7 +217,7 @@ def test_columns():
                                      "\n\tNetworkID\t\t\tinteger\n"):
         passed = False
         print("Failed Columns 2")
-
+    # testin correct use networks
     if test_foo("columns networks") != ("The table 'networks' has the following columns:"
                                         "\n\tName\t\tType"
                                         "\n\t------\t\t\t------"
@@ -205,21 +226,34 @@ def test_columns():
                                         "\n\tRanking\t\t\tinteger\n"):
         passed = False
         print("Failed Columns 3")
-
+    #     testing columns caps
+    if test_foo("columns Networks") != ("The table 'Networks' has the following columns:"
+                                        "\n\tName\t\tType"
+                                        "\n\t------\t\t\t------"
+                                        "\n\tNetworkID\t\t\tinteger"
+                                        "\n\tNetwork\t\t\tvarchar (20)"
+                                        "\n\tRanking\t\t\tinteger\n"):
+        passed = False
+        print("Failed Columns 3a")
+    # testing correct use incomplete/bad spelling
     if test_foo("columns net") != "The table 'net' is not in the database.\n":
         passed = False
         print("failed Columns 4")
 
-    if test_foo("columns networks networkid") != "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n":
+    if test_foo("columns networks networkid") != "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18" \
+                                                 "\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29\n30\n":
         passed = False
         print("Failed Columns 5")
 
-    if test_foo("columns networks network") != ("FXX\nHGTV\nABC\nHulu\nFox\nShowtime\nFood Network\nMTV\nFX\nNBC"
-                                               "\nComedy Central\nNetflix\nAMC\nNickolodean\n"):
+    if test_foo("columns networks network") != ("A&E\nABC\nAMC\nBoomerang\nBravo\nCBS\nComedy Central\nDiscovery Channel"
+                                                "\nE!\nFX\nFXX\nFood Network\nFox\nHGTV\nHistory Channel\nHulu\nLifetime"
+                                                "\nMTV\nNBC\nNational Geographic\nNetflix\nNickolodean\nOxygen\nPBS"
+                                                "\nShowtime\nTLC\nTNT\nUSA\nVH1\ntruTV\n"):
         passed = False
         print("Failed Columns 6")
 
-    if test_foo("columns networks ranking") != "23\n9\n3\n6\n4\n30\n55\n40\n21\n1\n35\n2\n20\n19\n":
+    if test_foo("columns networks ranking") != "23\n9\n3\n6\n4\n30\n55\n40\n21\n1\n35\n2\n20\n19\n10\n13\34\n67\n11\n54" \
+                                               "\n66\n42\n70\n71\n89\n45\n77\n53\n24\n102\n":
         passed = False
         print("Failed Column 7")
 
