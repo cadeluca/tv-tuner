@@ -14,5 +14,9 @@ Warm up project for CS 205 Spring 2019 at the University of Vermont. Creating a 
 ## Data Set
 Our data set contains the information about various TV shows and their networks, 
 on/off air status, number of seasons, runtime, and genre.
+## Citation
+The sqlite databases were made with sqlitestudio 
+https://sqlitestudio.pl/index.rvt
+
 ## Team Members
 Christian DeLuca, Megan Doyle, Jiangyong Yu, and Dale Larie.
