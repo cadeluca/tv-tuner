@@ -3,13 +3,11 @@
 """
 CS 205: Warm-up Project
 UVM Spring Semester 2019
-
 Team members:
 Christian DeLuca
 Jiangyong Yu
 Megan Doyle
 Dale Larie
-
 CLI for data on television shows
 """
 
@@ -255,7 +253,7 @@ def search(input_string):
             print("No results, check your query string")
             return ""
 
-        # keeps track of which indices are queired, for the table printing
+        # keeps track of which indices are queried, for the table printing
         queried_indices = [0]
 
         # fills the queried indices
@@ -288,7 +286,6 @@ class MainPrompt(Cmd):
     """
     Each function that begins with 'do_' is interpreted as a command in
     the shell. For example, do_runtime is called as runtime by the user.
-
     Each function with 'help_' corresponds to calling the help command with the connected
     function as a parameter. For example, help_runtime is called as 'help runtime'.
     """
@@ -425,9 +422,15 @@ class MainPrompt(Cmd):
         print("Unrecognized command: {}".format(inp))
 
 
+def run_function():
+    global database_name
+    database_name= 'tv_tuner.db'
+    global conn
+    conn = create_connection(database_name)
+
+
 if __name__ == '__main__':
     # create a database connection
-    database_name = 'tv_tuner.db'
-    conn = create_connection(database_name)
+    run_function()
     with conn:
         MainPrompt().cmdloop(cli_animations.intro())
