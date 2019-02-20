@@ -406,11 +406,13 @@ class MainPrompt(Cmd):
         print('Returns the full details of a show and/or best matching shows, including: network, season count,'
               'runtime, genre, and on/off air status. \nUsage:\n\truntime \'show_name\'')
 
-    # TODO: see if we actually need to follow the pycharm suggestion to make it static
-    @staticmethod
     def do_columns(inp):
         params = inp.split()
-        if len(params) == 2:
+        if inp == 'table':
+            print("Invalid table name.\nUsage:"
+                  "\n\tcolumns 'table' - returns a list of columns in that table."
+                  "\n\tcolumns 'table' 'column' - returns the contents of that column from that table.")
+        elif len(params) == 2:
             full_column_return(params)
         elif len(params) == 1:
             list_columns(params[0])
