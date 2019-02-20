@@ -109,10 +109,10 @@ def list_columns(desired_table_name):
     desired_table = cur.execute('PRAGMA table_info(%s)' % desired_table_name).fetchall()
     if len(desired_table) != 0:
         print("The table '%s' has the following columns:" % desired_table_name)
-        print("\tName\t\tType\n"
-              "\t------\t\t\t------")
+        print("\tName\t\t\t\tType\n"
+              "\t------\t\t\t\t------")
         for column in desired_table:
-            print("\t" + column[1] + "\t\t\t" + str(column[2]).lower())
+            print("\t" + column[1] + "\t\t\t\t" + str(column[2]).lower())
     else:
         print("The table '%s' is not in the database." % desired_table_name)
     conn.commit()
@@ -131,7 +131,7 @@ def full_column_return(query_list):
         for results in result:
             print(results[0])
     except sqlite3.OperationalError as err:
-        print(err)
+        print("Encountered an error: " + err)
     conn.commit()
 
 
@@ -406,7 +406,7 @@ class MainPrompt(Cmd):
         print('Returns the full details of a show and/or best matching shows, including: network, season count,'
               'runtime, genre, and on/off air status. \nUsage:\n\truntime \'show_name\'')
 
-    def do_columns(inp):
+    def do_columns(self, inp):
         params = inp.split()
         if inp == 'table':
             print("Invalid table name.\nUsage:"
