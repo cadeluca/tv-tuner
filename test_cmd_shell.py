@@ -47,6 +47,9 @@ def find_matching_show(searched_string):
     results = cur.execute('SELECT name FROM shows WHERE name LIKE "%' + searched_string + '%";').fetchall()
     conn.commit()
     return [result[0] for result in results]
+#
+# End Helper functions
+#
 
 
 #
@@ -112,7 +115,7 @@ def list_columns(desired_table_name):
         print("\tName\t\t\t\tType\n"
               "\t------\t\t\t\t------")
         for column in desired_table:
-            print("\t" + column[1] + "\t\t\t\t" + str(column[2]).lower())
+            print("\t" + '{0: <32}'.format(column[1]) + str(column[2]).lower())
     else:
         print("The table '%s' is not in the database." % desired_table_name)
     conn.commit()
@@ -133,11 +136,10 @@ def full_column_return(query_list):
     except sqlite3.OperationalError as err:
         print("Encountered an error: " + str(err))
     conn.commit()
-
-
 #
 # End SQL style functions
 #
+
 
 #
 # Simple grammar functions
@@ -174,6 +176,7 @@ def detail_viewer(detail_type, inp):
             elif detail_type == 'details':
                 result = cur.execute('SELECT * FROM shows LEFT JOIN networks ON shows.NetworkID=networks.NetworkID '
                                      'WHERE name="' + show + '";').fetchone()
+                # full detail display
                 print("Details for " + result[0] + ":")
                 print("\t- Runtime: " + str(result[1]) + " minutes")
                 print("\t- Seasons: " + str(result[2]))
@@ -185,9 +188,8 @@ def detail_viewer(detail_type, inp):
                 result = cur.execute('SELECT ' + detail_type + ' FROM shows LEFT JOIN networks ON shows.NetworkID=networks.NetworkID '
                                      'WHERE name="' + show + '";').fetchone()
                 print(("\t- %s is on " + result[0]) % show)
-
+        # formatted results for multiple matches
         else:
-            # formatted results for multiple matches
             print("Your query '%s' returned multiple results:" % inp)
             if detail_type != 'details' and detail_type != 'network':
                 for show in show_list:
@@ -204,6 +206,7 @@ def detail_viewer(detail_type, inp):
                 for show in show_list:
                     result = cur.execute('SELECT * FROM shows LEFT JOIN networks ON shows.NetworkID=networks.NetworkID '
                                          'WHERE name="' + show + '";').fetchone()
+                    # full detail display
                     print("Details for " + result[0] + ":")
                     print("\t- Runtime: " + str(result[1]) + " minutes")
                     print("\t- Seasons: " + str(result[2]))
@@ -217,8 +220,6 @@ def detail_viewer(detail_type, inp):
                         'WHERE name="' + show + '";').fetchone()
                     print(("\t- %s is on " + result[0]) % show)
         conn.commit()
-
-
 #
 # End Simple grammar functions
 #
@@ -227,8 +228,6 @@ def detail_viewer(detail_type, inp):
 #
 # Complex grammar functions
 #
-
-# this uses that big function.
 def search(input_string):
     """
     Search function, takes some parameters and returns a formatted table that shows those columns
@@ -280,7 +279,6 @@ def search(input_string):
 
     except:
         print("No results, check your query string")
-
 #
 # End Complex grammar functions
 #
@@ -318,7 +316,6 @@ class MainPrompt(Cmd):
         print('Displays the schema for the database. Note: this is not the same as the SQL '
               'schema command that provides an exportable file to be used to recreate the database.')
 
-    # TODO: REQUIRES FORMATTING
     def do_list(self, inp):
         if len(inp) != 0:
             list_table_content(inp)
@@ -331,7 +328,6 @@ class MainPrompt(Cmd):
     def do_search(self, inp):
         search(inp)
 
-    # TODO: EXPLAIN THE GRAMMAR TO THE USER AS CONCISELY AS POSSIBLE
     def help_search(self):
         print('Searches through database for desired show results. \nUsage:'
               '\n\tsearch - returns all names of shows in database'
