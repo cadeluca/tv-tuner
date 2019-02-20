@@ -425,7 +425,7 @@ class MainPrompt(Cmd):
         print("Unrecognized command: {}".format(inp))
 
 
-def mainFunction():
+def run_function():
     global database_name
     database_name= 'tv_tuner.db'
     global conn
@@ -434,6 +434,6 @@ def mainFunction():
 
 if __name__ == '__main__':
     # create a database connection
-    mainFunction()
+    run_function()
     with conn:
         MainPrompt().cmdloop(cli_animations.intro())

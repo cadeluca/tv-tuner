@@ -664,7 +664,7 @@ if __name__ == '__main__':
     # TODO: replace this with our database once we have it
     database_name = "tv_tuner.db"
     # create a database connection
-    test_cmd_shell.mainFunction()
+    test_cmd_shell.run_function()
 
         # test_cmd_shell.MainPrompt().default('a')
         # test_cmd_shell.MainPrompt().do_greet('x')
