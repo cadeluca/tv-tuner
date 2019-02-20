@@ -335,8 +335,10 @@ class MainPrompt(Cmd):
     def help_search(self):
         print('Searches through database for desired show results. \nUsage:'
               '\n\tsearch - returns all names of shows in database'
-              '\n\tsearch \'column\' - returns all names of shows with the specified column added'
-              '\n\tsearch \'column\' \'column_entry\' - returns all names of show filtered by specified column')
+              '\n\tsearch \'column\' - returns all names of shows with the specified column added, '
+              'chain as many columns as needed'
+              '\n\tsearch \'column\' \'column_entry\' - returns all names of show filtered by specified column, '
+              'chain as many columns and entries as needed')
 
     def do_runtime(self, inp):
         if len(inp) > 0:
