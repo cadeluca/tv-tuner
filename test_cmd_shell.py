@@ -44,7 +44,7 @@ def find_matching_show(searched_string):
     :return: list of matches
     """
     cur = conn.cursor()
-    results = cur.execute("SELECT name FROM shows WHERE name LIKE '%"+searched_string+"%';").fetchall()
+    results = cur.execute('SELECT name FROM shows WHERE name LIKE "%' + searched_string + '%";').fetchall()
     conn.commit()
     return [result[0] for result in results]
 
