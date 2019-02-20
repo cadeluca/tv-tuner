@@ -11,15 +11,7 @@ import subprocess
 # Debug variable
 debug = True
 
-        # def test_foo(inp):
-        #
-        #     capturedOutput = StringIO.StringIO()  # Create StringIO object
-        #     sys.stdout = capturedOutput  # and redirect stdout.
-        #     test_cmd_shell.MainPrompt().onecmd(inp) # Call unchanged function.
-        #     sys.stdout = sys.__stdout__  # Reset redirect.
-        #     # print 'Captured', capturedOutput.getvalue()  # Now works as before.
-
-            # return capturedOutput.getvalue()
+# helper function to input a string through the command shell and get the console output
 def test_foo(inp):
     captured_output = io.StringIO()  # Create StringIO object
 
@@ -30,7 +22,7 @@ def test_foo(inp):
 
     return captured_output.getvalue()
 
-
+# testing for exit
 def test_exit():
     passed = True
     if test_foo('q') != 'Tune in next time!':
@@ -46,7 +38,7 @@ def test_exit():
         passed = False
 
     return passed
-
+# testing for help
 def test_help():
     passed = True
     # testing help
@@ -68,7 +60,7 @@ def test_help():
 
     return passed
 
-
+# testing for genre
 def test_genre():
     passed = True
     # testing genre of known lower case input
@@ -91,7 +83,7 @@ def test_genre():
     #
     return passed
 
-
+# testing for network call
 def test_network():
     # testing correct use
     passed = True
@@ -113,7 +105,7 @@ def test_network():
     #
     return passed
 
-
+# testing for schema call
 def test_schema():
     passed = True
     # testing that schema comes up correctly
@@ -127,7 +119,7 @@ def test_schema():
 
     return passed
 
-
+# testing for seasons call
 def test_seasons():
     passed = True
     # testing incorrect use of seasons
@@ -152,7 +144,7 @@ def test_seasons():
 
     return passed
 
-
+# testing for tables call
 def test_tables():
     passed = True
     # testing correct use of tables
@@ -161,7 +153,7 @@ def test_tables():
         print("failed tables 1")
 
     return passed
-
+# testing for details calls
 def test_details():
     passed = True
     # testing incorrect use of details
@@ -197,7 +189,7 @@ def test_details():
         print("failed details 4")
 
     return passed
-
+# testing for columns call
 def test_columns():
     passed = True
     # testing incorrect use
@@ -314,7 +306,7 @@ def test_columns():
 
     return passed
 
-
+# testing for list calls
 def test_list():
     passed = True
     if test_foo("list") != ('Invalid number of arguments. \nUsage:'
@@ -390,7 +382,7 @@ def test_list():
 
     return passed
 
-
+# testing for runtime calls
 def test_runtime():
     passed = True
     if test_foo("runtime") != ("Invalid number of arguments.\nUsage:\n\truntime "
@@ -405,7 +397,7 @@ def test_runtime():
 
     return passed
 
-
+# testing for search calls
 def test_search():
     passed = True
     if test_foo("search always") != "Name                          \n\nAlways Sunny in Philidelphia  \n\n":
@@ -1339,6 +1331,7 @@ The Flintstones               102
         print("failed search 25")
     return passed
 
+# test for status calls
 def test_status():
     passed = True
     if test_foo("status") != ("Invalid number of arguments.\nUsage:"
@@ -1357,7 +1350,7 @@ def test_status():
 
 
     return passed
-
+# test driver to call all different test categories
 def test_driver():
     passed = True
     if test_columns():
@@ -1424,7 +1417,7 @@ def test_driver():
     if passed:
         print("\nall tests passed")
 
-
+# main function to run the whole shindig
 if __name__ == '__main__':
     # TODO: replace this with our database once we have it
     database_name = "tv_tuner.db"
