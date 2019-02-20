@@ -85,7 +85,6 @@ def list_table_content(inp):
     """
     table_list = []
     cur = conn.cursor()
-    # should try surrounding this in a try block and doing %s with the table name and just boot out on exception
     for table in cur.execute("SELECT name FROM sqlite_master WHERE type='table';").fetchall():
         table_list.append(table[0])
     if inp in table_list:
@@ -192,7 +191,7 @@ def detail_viewer(detail_type, inp):
             print("Your query '%s' returned multiple results:" % inp)
             if detail_type != 'details' and detail_type != 'network':
                 for show in show_list:
-                    result = cur.execute("SELECT %s FROM shows WHERE name='%s';" % (detail_type, show)).fetchone()
+                    result = cur.execute('SELECT ' + detail_type + ' FROM shows WHERE name="' + show + '";').fetchone()
                     if detail_type == 'runtime':
                         print(("\t- %s has a runtime of " + str(result[0]) + " minutes") % show)
                     elif detail_type == 'seasons':
