@@ -412,14 +412,15 @@ class MainPrompt(Cmd):
             print("Invalid table name.\nUsage:"
                   "\n\tcolumns 'table' - returns a list of columns in that table."
                   "\n\tcolumns 'table' 'column' - returns the contents of that column from that table.")
-        elif len(params) == 2:
-            full_column_return(params)
-        elif len(params) == 1:
-            list_columns(params[0])
         else:
-            print("Invalid number of arguments.\nUsage:"
-                  "\n\tcolumns 'table' - returns a list of columns in that table."
-                  "\n\tcolumns 'table' 'column' - returns the contents of that column from that table.")
+            if len(params) == 2:
+                full_column_return(params)
+            elif len(params) == 1:
+                list_columns(params[0])
+            else:
+                print("Invalid number of arguments.\nUsage:"
+                      "\n\tcolumns 'table' - returns a list of columns in that table."
+                      "\n\tcolumns 'table' 'column' - returns the contents of that column from that table.")
 
     def help_columns(self):
         print("Returns either a list of the columns in a table or the contents.\nUsage:"
