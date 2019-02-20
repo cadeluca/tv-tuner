@@ -207,32 +207,32 @@ def test_columns():
         print("Failed Columns 1")
     #     testing correct use shows
     if test_foo("columns shows") != ("The table 'shows' has the following columns:"
-                                     "\n\tName\t\tType"
-                                     "\n\t------\t\t\t------"
-                                     "\n\tName\t\t\tvarchar (40)"
-                                     "\n\tRuntime\t\t\tinteger"
-                                     "\n\tSeasons\t\t\tinteger"
-                                     "\n\tStatus\t\t\tvarchar (20)"
-                                     "\n\tGenre\t\t\tvarchar (20)"
-                                     "\n\tNetworkID\t\t\tinteger\n"):
+                                     "\n\tName\t\t\t\tType"
+                                     "\n\t------\t\t\t\t------"
+                                     "\n\tName\t\t\t\tvarchar (40)"
+                                     "\n\tRuntime\t\t\t\tinteger"
+                                     "\n\tSeasons\t\t\t\tinteger"
+                                     "\n\tStatus\t\t\t\tvarchar (20)"
+                                     "\n\tGenre\t\t\t\tvarchar (20)"
+                                     "\n\tNetworkID\t\t\t\tinteger\n"):
         passed = False
         print("Failed Columns 2")
     # testin correct use networks
     if test_foo("columns networks") != ("The table 'networks' has the following columns:"
-                                        "\n\tName\t\tType"
-                                        "\n\t------\t\t\t------"
-                                        "\n\tNetworkID\t\t\tinteger"
-                                        "\n\tNetwork\t\t\tvarchar (20)"
-                                        "\n\tRanking\t\t\tinteger\n"):
+                                        "\n\tName\t\t\t\tType"
+                                        "\n\t------\t\t\t\t------"
+                                        "\n\tNetworkID\t\t\t\tinteger"
+                                        "\n\tNetwork\t\t\t\tvarchar (20)"
+                                        "\n\tRanking\t\t\t\tinteger\n"):
         passed = False
         print("Failed Columns 3")
     #     testing columns caps
     if test_foo("columns Networks") != ("The table 'Networks' has the following columns:"
-                                        "\n\tName\t\tType"
-                                        "\n\t------\t\t\t------"
-                                        "\n\tNetworkID\t\t\tinteger"
-                                        "\n\tNetwork\t\t\tvarchar (20)"
-                                        "\n\tRanking\t\t\tinteger\n"):
+                                        "\n\tName\t\t\t\tType"
+                                        "\n\t------\t\t\t\t------"
+                                        "\n\tNetworkID\t\t\t\tinteger"
+                                        "\n\tNetwork\t\t\t\tvarchar (20)"
+                                        "\n\tRanking\t\t\t\tinteger\n"):
         passed = False
         print("Failed Columns 3a")
     # testing correct use incomplete/bad spelling
@@ -252,23 +252,71 @@ def test_columns():
         passed = False
         print("Failed Columns 6")
 
-    if test_foo("columns networks ranking") != "23\n9\n3\n6\n4\n30\n55\n40\n21\n1\n35\n2\n20\n19\n10\n13\34\n67\n11\n54" \
-                                               "\n66\n42\n70\n71\n89\n45\n77\n53\n24\n102\n":
+    if test_foo("columns networks ranking") != ("23\n9\n3\n6\n4\n30\n55\n40\n21\n1\n35\n2\n20\n19\n10\n13\n34\n67\n11"
+                                                "\n54\n66\n42\n70\n71\n89\n45\n77\n53\n24\n102\n"):
         passed = False
         print("Failed Column 7")
 
-    if test_foo("columns shows name") != ("911\nAlways Sunny in Philidelphia\nAmerican Horror Story" 
-                                         "\nAvatar the Last Airbender\nBlack Mirror\nBob's Burgers\nBreaking Bad" 
-                                         "\nBroad City\nBrooklyn Nine Nine\nCatfish\nChopped\nDear White People" 
-                                         "\nFixer Upper\nForensic Files\nFresh Off the Boat\nFuturama\nHell's Kitchen" 
-                                         "\nHouse Hunters\nJeapardy\nKilling Eve\nKitchen Nightmares\nNailed It!" 
-                                         "\nNew Girl\nParks and Recreation\nQueer Eye\nScream Queens\nShameless" 
-                                         "\nThe Bachelor\nThe Mindy Project\nYou\n"):
+    if test_foo("columns shows name") != ("911\nAlways Sunny in Philidelphia\nAmerica's Next Top Model\n"
+                                          "American Horror Story\nAvatar the Last Airbender\nBates Motel\n"
+                                          "Big Brother\nBlack Mirror\nBob's Burgers\nBotched\nBreaking Bad\n"
+                                          "Broad City\nBrooklyn Nine Nine\nCatfish\nChopped\nClaws\nDance Moms\n"
+                                          "Dear White People\nFixer Upper\nForensic Files\nFresh Off the Boat\n"
+                                          "Futurama\nHell's Kitchen\nHouse Hunters\nImpractical Jokers\nJeapardy\n"
+                                          "Killing Eve\nKitchen Nightmares\nMan vs. Wild\nMars\nModern Family\n"
+                                          "My 600 Pound Life\nNailed It!\nNew Girl\nParks and Recreation\n"
+                                          "Project Runway\nQueer Eye\nRupaul's Drag Race\nScream Queens\nSesame Street\n"
+                                          "Shameless\nThe Bachelor\nThe Flintstones\nThe Mindy Project\nVikings\nYou\n"):
         passed = False
         print("Failed coloumns 8")
 
-    if test_foo("columns shows runtime") != ("30\n30\n60\n30\n60\n30\n30\n60\n60\n90\n60\n60\n60\n60\n60\n30\n60\n30"
-                                             "\n30\n30\n30\n30\n45\n60\n60\n60\n30\n30\n50\n30\n"):
+    if test_foo("columns shows runtime") != ("30\n30
+60
+30
+60
+30
+30
+60
+60
+90
+60
+60
+60
+60
+60
+30
+60
+30
+30
+30
+30
+30
+45
+60
+60
+60
+30
+30
+50
+30
+60
+60
+60
+60
+30
+30
+60
+30
+60
+60
+30
+60
+60
+60
+60
+30
+"
+                                             ):
         passed = False
         print("failed columns 9")
 
