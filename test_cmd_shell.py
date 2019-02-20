@@ -241,12 +241,10 @@ def search(input_string):
     # getting the query and columns
     query, queried_columns = query_writer(input_string)
 
-    print(query)
-
     # formatting for the print table
     column_names = ["Name", "Runtime", "Seasons", "Status", "Genre", "NID", "NID", "Network", "Ranking"]
     # spacing for the columns
-    column_widths = ["30", "9", "9", "8", "8", "8", "8", "10", "8"]
+    column_widths = ["30", "9", "9", "8", "8", "8", "8", "20", "8"]
 
     try:
         # querying the database
