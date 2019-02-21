@@ -44,4 +44,4 @@ def intro():
      ~~~~~~~~~~~~~~~ / /     888        Y888P            888     Y88b. .d88P 888   Y8888 888        888  T88b  
                      ~~      888         Y8P             888      "Y88888P"  888    Y888 8888888888 888   T88b 
                 """, 0.03, 0.01)
-    typewrite('Welcome! Type "?" or "help" to list commands.\n', 0.02, 0.01)
+    typewrite('Welcome! Looking for a show to watch? Search our database! Type "?" or "help" to list commands.\n', 0.02, 0.01)
